@@ -72,8 +72,9 @@
   --container: min(1100px, 92vw);
 }
 
+/* Auto light: OS prefers light AND user hasn't manually chosen dark */
 @media (prefers-color-scheme: light) {
-  :root {
+  :root:not([data-theme="dark"]) {
     color-scheme: light;
     --bg: #f3f6ff;
     --surface: #d6cfe5;
@@ -140,6 +141,73 @@
   }
 }
 
+/* Manual light: user clicked the toggle */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f3f6ff;
+  --surface: #d6cfe5;
+  --surface-2: #241a2e;
+  --text: #0b1020;
+  --muted: rgba(11, 16, 32, 0.78);
+  --line: rgba(11, 16, 32, 0.14);
+  --page-background:
+    radial-gradient(circle at 12% 10%, rgba(242, 138, 75, 0.16) 0, transparent 28%),
+    radial-gradient(circle at 86% 4%, rgba(125, 215, 255, 0.24) 0, transparent 26%),
+    linear-gradient(145deg, rgba(243, 246, 255, 0.98) 0%, rgba(214, 207, 229, 0.94) 46%, rgba(243, 246, 255, 0.98) 100%);
+  --shape-opacity: 0.18;
+  --header-bg: rgba(243, 246, 255, 0.8);
+  --nav-panel-bg: rgba(243, 246, 255, 0.96);
+  --surface-fill: linear-gradient(165deg, rgba(243, 246, 255, 0.94), rgba(214, 207, 229, 0.72));
+  --surface-fill-strong: linear-gradient(145deg, rgba(243, 246, 255, 0.98), rgba(214, 207, 229, 0.88) 72%, rgba(243, 246, 255, 0.98));
+  --surface-fill-muted: rgba(11, 16, 32, 0.04);
+  --chip-fill: rgba(11, 16, 32, 0.05);
+  --chip-text: #241a2e;
+  --note: rgba(11, 16, 32, 0.68);
+  --footer-text: rgba(11, 16, 32, 0.72);
+  --cite-text: #14121b;
+  --card-border-hover: rgba(11, 16, 32, 0.22);
+  --tilt-shadow:
+    0 18px 42px rgba(11, 16, 32, 0.12),
+    0 0 0 1px rgba(242, 138, 75, 0.14),
+    0 0 0 1px rgba(125, 215, 255, 0.12) inset;
+  --ghost-fill: rgba(11, 16, 32, 0.03);
+  --eyebrow-bg: rgba(242, 138, 75, 0.16);
+  --eyebrow-border: rgba(242, 138, 75, 0.32);
+  --eyebrow-text: #0b1020;
+  --metric-bg: rgba(242, 138, 75, 0.16);
+  --metric-border: rgba(242, 138, 75, 0.34);
+  --metric-text: #0b1020;
+  --featured-ring: rgba(242, 138, 75, 0.72);
+  --featured-shadow: 0 0 0 6px rgba(242, 138, 75, 0.08);
+  --field-fill: rgba(243, 246, 255, 0.88);
+  --placeholder: rgba(11, 16, 32, 0.58);
+  --focus-ring: rgba(11, 16, 32, 0.42);
+  --focus-shadow: 0 0 0 4px rgba(125, 215, 255, 0.24);
+  --status-padding: 0.65rem 0.85rem;
+  --status-ok-bg: rgba(125, 215, 255, 0.22);
+  --status-ok-border: rgba(11, 16, 32, 0.1);
+  --status-ok-text: #0b1020;
+  --status-err-bg: rgba(242, 138, 75, 0.16);
+  --status-err-border: rgba(242, 138, 75, 0.24);
+  --status-err-text: #0b1020;
+  --video-frame: #14121b;
+  --video-btn-bg: rgba(11, 16, 32, 0.74);
+  --video-btn-text: #f3f6ff;
+  --video-btn-border: rgba(243, 246, 255, 0.22);
+  --contact-button-shadow:
+    0 12px 24px rgba(11, 16, 32, 0.18),
+    0 5px 0 rgba(66, 30, 10, 0.38);
+  --contact-button-shadow-hover:
+    0 16px 28px rgba(11, 16, 32, 0.2),
+    0 6px 0 rgba(66, 30, 10, 0.38);
+  --contact-button-shadow-active:
+    0 6px 14px rgba(11, 16, 32, 0.16),
+    0 2px 0 rgba(66, 30, 10, 0.38);
+  --cursor-border: rgba(11, 16, 32, 0.24);
+  --cursor-shadow: 0 0 18px rgba(125, 215, 255, 0.4);
+  --cursor-fill: rgba(125, 215, 255, 0.18);
+}
+
 *,
 *::before,
 *::after {
@@ -157,6 +225,15 @@ body {
   background: var(--page-background);
   line-height: 1.6;
   overflow-x: hidden;
+
+  /* Hide native scrollbar — all browsers */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none;
+  /* Chromium / Safari */
 }
 
 .container {
@@ -216,7 +293,7 @@ body {
 }
 
 .logo img {
-  border-radius:50px ;
+  border-radius: 50px;
   width: 42px;
   height: 42px;
   object-fit: contain;
@@ -252,6 +329,42 @@ body {
   padding: 0.5rem 0.75rem;
   border-radius: 10px;
   font-family: inherit;
+  cursor: pointer;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--surface-fill-muted);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  background: rgba(242, 138, 75, 0.08);
+  transform: rotate(15deg);
+}
+
+.theme-toggle:active {
+  transform: rotate(30deg) scale(0.92);
+}
+
+.theme-toggle svg {
+  transition: transform 0.3s ease;
 }
 
 .btn {
@@ -331,13 +444,13 @@ section {
 h1,
 h2,
 h3 {
+  cursor: default;
   line-height: 1.15;
   letter-spacing: -0.03em;
   margin-top: 0;
 }
 
 h1 {
-  cursor:default;
   max-width: 14ch;
   font-size: clamp(2.3rem, 6vw, 4.3rem);
   margin-bottom: 1rem;
@@ -797,7 +910,30 @@ h2 {
   background: var(--cursor-fill);
 }
 
+/* ── View Transition: circle-wipe theme switch ── */
+/* Disable the default cross-fade so only our clip-path animation runs */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/*
+ * Dark → Light fix: the OLD dark snapshot must be on top
+ * so its contracting clip-path is visible over the new light page.
+ * After the view-transition callback runs, html[data-theme="light"]
+ * is set, so these selectors only activate for dark→light transitions.
+ */
+:root[data-theme="light"]::view-transition-old(root) {
+  z-index: 999;
+}
+
+:root[data-theme="light"]::view-transition-new(root) {
+  z-index: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
+
   .card,
   .service-card,
   .result-card,
@@ -820,6 +956,7 @@ h2 {
 }
 
 @media (max-width: 950px) {
+
   .work-grid,
   .service-grid,
   .result-grid,
@@ -862,6 +999,11 @@ h2 {
 
   .nav .btn-small {
     display: none;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
   }
 
   .brand-row {
