@@ -68,9 +68,9 @@ export default function Home() {
           <p className="eyebrow">SaaS Ad Video Editor Portfolio</p>
           <h1>I turn product screens into scroll-stopping ad creatives.</h1>
           <p className="hero-copy">
-            I edit fast-paced SaaS ad videos for paid social, landing pages, and
-            launch campaigns. Clean motion, sharp hooks, and messaging that
-            converts.
+            Motion graphics artist &amp; video editor crafting high-converting
+            SaaS ad creatives in After Effects, Premiere Pro &amp; DaVinci
+            Resolve. Clean motion, sharp hooks, and messaging that converts.
           </p>
           <div className="hero-actions">
             <a className="btn" href="#work">Watch My Work</a>
