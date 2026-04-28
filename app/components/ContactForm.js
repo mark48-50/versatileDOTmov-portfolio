@@ -1,50 +1,33 @@
 "use client";
 
 import { useState } from "react";
+import { sendEmail } from "../actions";
 
 export default function ContactForm() {
-  const [status, setStatus] = useState({ text: "", type: "" });
+  const [status, setStatus]   = useState({ text: "", type: "" });
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setStatus({ text: "Sending...", type: "" });
 
     const formData = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(formData.entries());
+    const form = e.currentTarget;
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const result = await sendEmail(formData);
 
-      const contentType = response.headers.get("content-type") || "";
-      const data = contentType.includes("application/json")
-        ? await response.json().catch(() => ({}))
-        : {};
-
-      if (!response.ok || !data.ok) {
-        if (data?.error) {
-          setStatus({ text: data.error, type: "err" });
-        } else if (!contentType.includes("application/json")) {
-          setStatus({
-            text: "Server not running. Start it with npm run dev, then open http://localhost:3000.",
-            type: "err",
-          });
-        } else {
-          setStatus({
-            text: "Something went wrong. Please try again.",
-            type: "err",
-          });
-        }
-        return;
+      if (!result.ok) {
+        setStatus({ text: result.error || "Something went wrong. Please try again.", type: "err" });
+      } else {
+        setStatus({ text: "Sent! I'll reply soon.", type: "ok" });
+        form.reset();
       }
-
-      setStatus({ text: "Sent. I will reply soon.", type: "ok" });
-      e.currentTarget.reset();
     } catch {
       setStatus({ text: "Network error. Please try again.", type: "err" });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,6 +42,7 @@ export default function ContactForm() {
           name="name"
           required
           placeholder="Harish Sontakke"
+          disabled={loading}
         />
       </label>
       <label>
@@ -68,11 +52,12 @@ export default function ContactForm() {
           name="email"
           required
           placeholder="versatileDOTmov@gmail.com"
+          disabled={loading}
         />
       </label>
       <label>
         <span>Number</span>
-        <input type="tel" name="number" placeholder="+91 0000-0000-00" />
+        <input type="tel" name="number" placeholder="+91 0000-0000-00" disabled={loading} />
       </label>
       <label>
         <span>What services do you want from us?</span>
@@ -80,10 +65,11 @@ export default function ContactForm() {
           name="services"
           rows={4}
           placeholder="Tell me what kind of video editing help you need..."
+          disabled={loading}
         ></textarea>
       </label>
-      <button className="btn" type="submit">
-        Send Inquiry
+      <button className="btn" type="submit" disabled={loading}>
+        {loading ? "Sending…" : "Send Inquiry"}
       </button>
       <p className={statusClass} role="status" aria-live="polite">
         {status.text}
