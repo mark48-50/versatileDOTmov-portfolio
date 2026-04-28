@@ -90,8 +90,9 @@ export const metadata = {
 
   /* ── Icons ── */
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
 
   /* ── Verification (add IDs once you register) ── */
