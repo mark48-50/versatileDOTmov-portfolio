@@ -892,13 +892,15 @@ h2 {
 
 .reveal {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(28px) scale(0.98);
+  transition:
+    opacity 1.2s ease-in-out,
+    transform 1.2s ease-in-out;
 }
 
 .reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .cursor-fx {

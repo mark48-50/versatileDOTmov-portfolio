@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { sendEmail } from "../actions";
 
 export default function ContactForm() {
@@ -68,9 +69,15 @@ export default function ContactForm() {
           disabled={loading}
         ></textarea>
       </label>
-      <button className="btn" type="submit" disabled={loading}>
+      <motion.button
+        className="btn"
+        type="submit"
+        disabled={loading}
+        whileHover={!loading ? { y: -3, boxShadow: "0 10px 28px rgba(242, 138, 75, 0.32)" } : {}}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+      >
         {loading ? "Sending…" : "Send Inquiry"}
-      </button>
+      </motion.button>
       <p className={statusClass} role="status" aria-live="polite">
         {status.text}
       </p>

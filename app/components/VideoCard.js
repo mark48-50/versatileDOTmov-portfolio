@@ -1,6 +1,13 @@
 "use client";
 
 import { useRef } from "react";
+import { motion } from "framer-motion";
+
+const glowHover = {
+  boxShadow:
+    "0 0 0 2px rgba(125, 215, 255, 0.9), 0 0 32px rgba(125, 215, 255, 0.5), 0 0 64px rgba(242, 138, 75, 0.25)",
+};
+const glowTransition = { duration: 0.35, ease: "linear" };
 
 export default function VideoCard({ poster, src, title, desc, autoPlay = false }) {
   const videoRef = useRef(null);
@@ -28,11 +35,8 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
     e.preventDefault();
     const video = videoRef.current;
     if (!video) return;
-    if (video.paused) {
-      video.play().catch(() => {});
-    } else {
-      stopToPoster();
-    }
+    if (video.paused) video.play().catch(() => {});
+    else stopToPoster();
     syncButtons();
   };
 
@@ -46,25 +50,27 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
 
   if (autoPlay) {
     return (
-      <article className="card">
+      <motion.article
+        className="card"
+        whileHover={glowHover}
+        transition={glowTransition}
+      >
         <div className="video-thumb">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-          >
+          <video autoPlay loop muted playsInline preload="metadata">
             <source src={src} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
-      </article>
+      </motion.article>
     );
   }
 
   return (
-    <article className="card">
+    <motion.article
+      className="card"
+      whileHover={glowHover}
+      transition={glowTransition}
+    >
       <div className="video-thumb">
         <video
           ref={videoRef}
@@ -113,7 +119,6 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
           </a>
         </div>
       </div>
-
-    </article>
+    </motion.article>
   );
 }

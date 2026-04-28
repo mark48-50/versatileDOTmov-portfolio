@@ -1,5 +1,6 @@
 import "./globals.css";
 import JsonLd from "./components/JsonLd";
+import { Analytics } from "@vercel/analytics/next";
 
 /* ── 1. Full Next.js Metadata Object ── */
 export const metadata = {
@@ -120,6 +121,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         {children}
+        <Analytics />
         <JsonLd />
       </body>
     </html>

@@ -2,6 +2,9 @@ import ClientInteractions from "./components/ClientInteractions";
 import ContactForm from "./components/ContactForm";
 import VideoCard from "./components/VideoCard";
 import ThemeToggle from "./components/ThemeToggle";
+import HeroSection from "./components/HeroSection";
+import StaggeredGrid from "./components/StaggeredGrid";
+import ParallaxBackground from "./components/ParallaxBackground";
 
 const videos = [
   {
@@ -45,8 +48,7 @@ const popVideos = [
 export default function Home() {
   return (
     <>
-      <div className="bg-shape bg-shape-1" aria-hidden="true"></div>
-      <div className="bg-shape bg-shape-2" aria-hidden="true"></div>
+      <ParallaxBackground />
 
       <header className="site-header">
         <nav className="nav container">
@@ -75,49 +77,20 @@ export default function Home() {
       </header>
 
       <main id="home">
-        <section className="hero container reveal">
-          <p className="eyebrow">SaaS Ad Video Editor Portfolio</p>
-          <h1>I turn product screens into scroll-stopping ad creatives.</h1>
-          <p className="hero-copy">
-            Motion graphics artist &amp; video editor crafting high-converting
-            SaaS ad creatives in After Effects, Premiere Pro &amp; DaVinci
-            Resolve. Clean motion, sharp hooks, and messaging that converts.
-          </p>
-          <div className="hero-actions">
-            <a className="btn" href="#work">Watch My Work</a>
-            <a className="btn btn-ghost" href="#services">View Services</a>
-          </div>
-          <ul className="stats">
-            <li><strong>120+</strong><span>Ads Edited</span></li>
-            <li><strong>38%</strong><span>Avg CTR Lift*</span></li>
-            <li><strong>48 hrs</strong><span>Turnaround</span></li>
-          </ul>
-          <p className="note">
-            *Based on client-reported campaign comparisons.
-          </p>
-        </section>
+        <HeroSection />
 
-        <section className="brands container reveal">
-          <p>Worked with growth teams at:</p>
-          <div className="brand-row">
-            <span>NimbusCRM</span>
-            <span>FlowSprint</span>
-            <span>StackPilot</span>
-            <span>CloudLoom</span>
-            <span>SprintDesk</span>
-          </div>
-        </section>
+
 
         <section id="work" className="work container reveal">
           <div className="section-head">
             <p className="eyebrow">Featured Projects</p>
             <h2>Recent Ad Edits</h2>
           </div>
-          <div className="work-grid">
+          <StaggeredGrid className="work-grid">
             {videos.map((v, i) => (
               <VideoCard key={i} {...v} />
             ))}
-          </div>
+          </StaggeredGrid>
         </section>
 
         <section id="pop-edits" className="work container reveal">
@@ -125,11 +98,11 @@ export default function Home() {
             <p className="eyebrow">Pop Edits</p>
             <h2>Pop Edits</h2>
           </div>
-          <div className="work-grid pop-grid">
+          <StaggeredGrid className="work-grid pop-grid">
             {popVideos.map((src, i) => (
               <VideoCard key={i} src={src} />
             ))}
-          </div>
+          </StaggeredGrid>
         </section>
 
         <section id="services" className="services container reveal">
@@ -209,42 +182,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="pricing container reveal">
-          <div className="section-head">
-            <p className="eyebrow">Packages</p>
-            <h2>Engagement Options</h2>
-          </div>
-          <div className="price-grid">
-            <article className="price-card">
-              <h3>Starter</h3>
-              <p className="price">$600<span>/project</span></p>
-              <ul>
-                <li>2 ad videos (15-30s)</li>
-                <li>2 revision rounds</li>
-                <li>Basic motion captions</li>
-              </ul>
-            </article>
-            <article className="price-card featured">
-              <p className="tag">Most Popular</p>
-              <h3>Growth</h3>
-              <p className="price">$1,400<span>/month</span></p>
-              <ul>
-                <li>8 ad videos/month</li>
-                <li>A/B hook variations</li>
-                <li>Priority turnaround</li>
-              </ul>
-            </article>
-            <article className="price-card">
-              <h3>Scale</h3>
-              <p className="price">Custom</p>
-              <ul>
-                <li>High-volume creative pipeline</li>
-                <li>Weekly optimization loop</li>
-                <li>Dedicated edit partner</li>
-              </ul>
-            </article>
-          </div>
-        </section>
+
 
         <section id="contact" className="contact container reveal">
           <div className="contact-card">
