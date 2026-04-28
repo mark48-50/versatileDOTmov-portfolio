@@ -40,9 +40,6 @@ const popVideos = [
   "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-6.mp4",
   "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-7.mp4",
   "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-8.mp4",
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/Video%20-%201.mp4",
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/video%20-%202.mp4",
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/video%20-%203.mp4",
 ];
 
 export default function Home() {
@@ -128,9 +125,9 @@ export default function Home() {
             <p className="eyebrow">Pop Edits</p>
             <h2>Pop Edits</h2>
           </div>
-          <div className="work-grid">
+          <div className="work-grid pop-grid">
             {popVideos.map((src, i) => (
-              <VideoCard key={i} src={src} autoPlay />
+              <VideoCard key={i} src={src} />
             ))}
           </div>
         </section>
