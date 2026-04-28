@@ -165,7 +165,7 @@ export default function Home() {
         <section id="results" className="results container reveal">
           <div className="section-head">
             <p className="eyebrow">Impact</p>
-            <h2>Client Results Snapshot</h2>
+            <h2>Results Snapshot</h2>
           </div>
           <div className="result-grid">
             <article className="result-card">
@@ -201,12 +201,10 @@ export default function Home() {
             <blockquote>
               &ldquo;Our paid team finally had creative that matched our product
               quality. Performance lifted in week one.&rdquo;
-              <cite>Head of Growth, NimbusCRM</cite>
             </blockquote>
             <blockquote>
               &ldquo;Fast turnaround, clear creative logic, and edits that
               actually improve CAC. Exactly what we needed.&rdquo;
-              <cite>Performance Lead, FlowSprint</cite>
             </blockquote>
           </div>
         </section>
