@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 
-export default function VideoCard({ poster, src, title, desc }) {
+export default function VideoCard({ poster, src, title, desc, autoPlay = false }) {
   const videoRef = useRef(null);
   const playRef = useRef(null);
   const muteRef = useRef(null);
@@ -43,6 +43,25 @@ export default function VideoCard({ poster, src, title, desc }) {
     video.muted = !video.muted;
     syncButtons();
   };
+
+  if (autoPlay) {
+    return (
+      <article className="card">
+        <div className="video-thumb">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+          >
+            <source src={src} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className="card">

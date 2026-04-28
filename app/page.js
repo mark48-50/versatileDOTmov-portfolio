@@ -6,21 +6,21 @@ import ThemeToggle from "./components/ThemeToggle";
 const videos = [
   {
     poster: "/thumbnail/thumbnail - 1.jpg",
-    src: "/videos/Video - 1.mp4",
+    src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/Video%20-%201.mp4",
     title: 'FlowSprint: "Stop Losing Leads"',
     desc: "15s conversion ad with founder hook, UI zoom transitions, and social proof overlays.",
     tags: ["Hook rewrite + pacing", "Motion subtitles", "A/B cut variants"],
   },
   {
     poster: "/thumbnail/thumbnail - 2.jpg",
-    src: "/videos/video - 2.mp4",
+    src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/video%20-%202.mp4",
     title: "NimbusCRM: Product Launch Spot",
     desc: "30s launch edit for enterprise audience with premium motion language and CTA sequencing.",
     tags: ["Screen replacement", "Brand sound design", "Multi-format exports"],
   },
   {
     poster: "/thumbnail/thumbnail - 3.png",
-    src: "/videos/video - 3.mp4",
+    src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/video%20-%203.mp4",
     title: "CloudLoom: Demo-to-Ad Cutdown",
     desc: "Repurposed webinar demo into high-energy paid ad sequence with stronger narrative arc.",
     tags: [
@@ -32,14 +32,17 @@ const videos = [
 ];
 
 const popVideos = [
-  { src: "/videos/pop-video-1.mp4" },
-  { src: "/videos/pop-video-2.mp4" },
-  { src: "/videos/pop-video-3.mp4" },
-  { src: "/videos/pop-video-4.mp4" },
-  { src: "/videos/pop-video-5.mp4" },
-  { src: "/videos/pop-video-6.mp4" },
-  { src: "/videos/pop-video-7.mp4" },
-  { src: "/videos/pop-video-8.mp4" },
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-1.mp4",
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-2.mp4",
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-3.mp4",
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-4.mp4",
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-5.mp4",
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-6.mp4",
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-7.mp4",
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-8.mp4",
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/Video%20-%201.mp4",
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/video%20-%202.mp4",
+  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/video%20-%203.mp4",
 ];
 
 export default function Home() {
@@ -126,8 +129,8 @@ export default function Home() {
             <h2>Pop Edits</h2>
           </div>
           <div className="work-grid">
-            {popVideos.map((v, i) => (
-              <VideoCard key={i} src={v.src} />
+            {popVideos.map((src, i) => (
+              <VideoCard key={i} src={src} autoPlay />
             ))}
           </div>
         </section>
