@@ -4,11 +4,11 @@ import { Analytics } from "@vercel/analytics/next";
 
 /* ── 1. Full Next.js Metadata Object ── */
 export const metadata = {
-  metadataBase: new URL("https://versatiledotmov.com"),
+  // IMPORTANT: Pointing to your live Vercel URL so Google indexes the right site!
+  metadataBase: new URL("https://versatiledotmovportfolio.vercel.app"),
 
   title: {
-    default:
-      "Harish Sontakke — Motion Graphics & Video Editor | versatileDOTmov",
+    default: "versatileDOTmov | Harish Sontakke — Motion Graphics & Video Editor",
     template: "%s | versatileDOTmov",
   },
 
@@ -35,7 +35,7 @@ export const metadata = {
   ],
 
   authors: [
-    { name: "Harish Sontakke", url: "https://versatiledotmov.com" },
+    { name: "Harish Sontakke", url: "https://versatiledotmovportfolio.vercel.app" },
   ],
   creator: "Harish Sontakke",
   publisher: "versatileDOTmov",
@@ -44,10 +44,9 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://versatiledotmov.com",
+    url: "https://versatiledotmovportfolio.vercel.app",
     siteName: "versatileDOTmov",
-    title:
-      "Harish Sontakke — Motion Graphics & Video Editor | versatileDOTmov",
+    title: "Harish Sontakke — Motion Graphics & Video Editor | versatileDOTmov",
     description:
       "Freelance motion graphics artist & video editor crafting high-converting SaaS ad creatives, product demos, and paid social campaigns.",
     images: [
@@ -85,7 +84,7 @@ export const metadata = {
   },
 
   alternates: {
-    canonical: "https://versatiledotmov.com",
+    canonical: "https://versatiledotmovportfolio.vercel.app",
   },
 
   /* ── Icons ── */
@@ -97,8 +96,9 @@ export const metadata = {
 
   /* ── Verification (add IDs once you register) ── */
   verification: {
+    // When Google Search Console gives you an HTML Tag to verify ownership, 
+    // grab the string of random letters/numbers and paste it right here:
     // google: "your-google-verification-code",
-    // yandex: "your-yandex-verification-code",
   },
 
   /* ── Other ── */
