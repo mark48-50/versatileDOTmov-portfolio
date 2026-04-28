@@ -31,6 +31,17 @@ const videos = [
   },
 ];
 
+const popVideos = [
+  { src: "/videos/pop-video-1.mp4" },
+  { src: "/videos/pop-video-2.mp4" },
+  { src: "/videos/pop-video-3.mp4" },
+  { src: "/videos/pop-video-4.mp4" },
+  { src: "/videos/pop-video-5.mp4" },
+  { src: "/videos/pop-video-6.mp4" },
+  { src: "/videos/pop-video-7.mp4" },
+  { src: "/videos/pop-video-8.mp4" },
+];
+
 export default function Home() {
   return (
     <>
@@ -105,6 +116,18 @@ export default function Home() {
           <div className="work-grid">
             {videos.map((v, i) => (
               <VideoCard key={i} {...v} />
+            ))}
+          </div>
+        </section>
+
+        <section id="pop-edits" className="work container reveal">
+          <div className="section-head">
+            <p className="eyebrow">Pop Edits</p>
+            <h2>Pop Edits</h2>
+          </div>
+          <div className="work-grid">
+            {popVideos.map((v, i) => (
+              <VideoCard key={i} src={v.src} />
             ))}
           </div>
         </section>

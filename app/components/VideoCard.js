@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 
-export default function VideoCard({ poster, src, title, desc, tags }) {
+export default function VideoCard({ poster, src, title, desc }) {
   const videoRef = useRef(null);
   const playRef = useRef(null);
   const muteRef = useRef(null);
@@ -79,15 +79,22 @@ export default function VideoCard({ poster, src, title, desc, tags }) {
           >
             Mute
           </button>
+          <a
+            href={src}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="video-btn"
+            style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.5rem" }}
+            aria-label="View full size"
+            title="View full size"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+            </svg>
+          </a>
         </div>
       </div>
-      <h3>{title}</h3>
-      <p>{desc}</p>
-      <ul>
-        {tags.map((tag, i) => (
-          <li key={i}>{tag}</li>
-        ))}
-      </ul>
+
     </article>
   );
 }

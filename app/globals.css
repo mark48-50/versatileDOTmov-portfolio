@@ -650,12 +650,20 @@ h2 {
   background: var(--video-frame);
 }
 
+.video-thumb:last-child {
+  margin-bottom: 0;
+}
+
 .video-thumb video {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
   pointer-events: none;
+}
+
+#pop-edits .video-thumb video {
+  object-fit: contain;
 }
 
 .video-controls {
