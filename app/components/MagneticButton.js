@@ -1,19 +1,21 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 // Low stiffness + high damping = heavy, premium magnetic pull
 const SPRING = { stiffness: 80, damping: 20, mass: 1.2 };
 const PULL_STRENGTH = 0.42;
 const PULL_RADIUS = 100;
 
+// Framer-motion-aware next/link wrapper
+const MotionLink = motion.create(Link);
+
 export default function MagneticButton({ children, href, className, ...rest }) {
   const ref = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const xS = useSpring(x, SPRING);
-  const yS = useSpring(y, SPRING);
+  const x = useRef(0);
+  const y = useRef(0);
 
   const onMove = (e) => {
     const el = ref.current;
@@ -25,27 +27,25 @@ export default function MagneticButton({ children, href, className, ...rest }) {
     const dy = e.clientY - cy;
     const dist = Math.sqrt(dx * dx + dy * dy);
     if (dist < PULL_RADIUS) {
-      x.set(dx * PULL_STRENGTH);
-      y.set(dy * PULL_STRENGTH);
+      el.style.transform = `translate(${dx * PULL_STRENGTH}px, ${dy * PULL_STRENGTH}px)`;
     } else {
-      x.set(0);
-      y.set(0);
+      el.style.transform = "";
     }
   };
 
   const onLeave = () => {
-    x.set(0);
-    y.set(0);
+    const el = ref.current;
+    if (el) el.style.transform = "";
   };
 
-  const Tag = href ? motion.a : motion.button;
+  // Use next/link (MotionLink) for href links, motion.button for buttons
+  const Tag = href ? MotionLink : motion.button;
 
   return (
     <Tag
       ref={ref}
       href={href}
       className={className}
-      style={{ x: xS, y: yS }}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       whileTap={{ scale: 0.96 }}

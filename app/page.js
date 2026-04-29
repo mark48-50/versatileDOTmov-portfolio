@@ -1,3 +1,5 @@
+import Link from "next/link";
+import Image from "next/image";
 import ClientInteractions from "./components/ClientInteractions";
 import ContactForm from "./components/ContactForm";
 import VideoCard from "./components/VideoCard";
@@ -50,28 +52,35 @@ export default function Home() {
     <>
       <ParallaxBackground />
 
-      <header className="site-header">
-        <nav className="nav container">
-          <a className="logo" href="#home" aria-label="versatileDOTmov home">
-            <img src="/logo.png" alt="versatileDOTmov logo" />
+      <header className="site-header" role="banner">
+        <nav className="nav container" aria-label="Main site navigation">
+          <Link className="logo" href="#home" aria-label="versatileDOTmov — go to homepage">
+            <Image
+              src="/logo.png"
+              alt="versatileDOTmov SaaS Video Editing Logo — Harish Sontakke"
+              width={40}
+              height={40}
+              priority
+            />
             <span>versatileDOTmov</span>
-          </a>
+          </Link>
           <button
             className="menu-toggle"
-            aria-label="Open menu"
+            aria-label="Open site navigation menu"
             aria-expanded="false"
+            aria-controls="nav-links"
           >
             Menu
           </button>
-          <ul className="nav-links">
-            <li><a href="#work">Work</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#results">Results</a></li>
-            <li><a href="#contact">Contact</a></li>
+          <ul className="nav-links" id="nav-links" role="list">
+            <li><Link href="#work">Work</Link></li>
+            <li><Link href="#services">Services</Link></li>
+            <li><Link href="#results">Results</Link></li>
+            <li><Link href="#contact">Contact</Link></li>
           </ul>
-          <a className="btn btn-small" href="#contact">
+          <Link className="btn btn-small" href="#contact" aria-label="Book a discovery call with versatileDOTmov">
             Book a Call
-          </a>
+          </Link>
           <ThemeToggle />
         </nav>
       </header>
@@ -79,12 +88,11 @@ export default function Home() {
       <main id="home">
         <HeroSection />
 
-
-
-        <section id="work" className="work container reveal">
+        {/* ── Recent Ad Edits ── */}
+        <section id="work" className="work container reveal" aria-labelledby="work-heading">
           <div className="section-head">
             <p className="eyebrow">Featured Projects</p>
-            <h2>Recent Ad Edits</h2>
+            <h2 id="work-heading">Recent Ad Edits</h2>
           </div>
           <StaggeredGrid className="work-grid">
             {videos.map((v, i) => (
@@ -93,10 +101,11 @@ export default function Home() {
           </StaggeredGrid>
         </section>
 
-        <section id="pop-edits" className="work container reveal">
+        {/* ── Pop Edits ── */}
+        <section id="pop-edits" className="work container reveal" aria-labelledby="pop-heading">
           <div className="section-head">
             <p className="eyebrow">Pop Edits</p>
-            <h2>Pop Edits</h2>
+            <h2 id="pop-heading">Pop Edits</h2>
           </div>
           <StaggeredGrid className="work-grid pop-grid">
             {popVideos.map((v, i) => (
@@ -105,10 +114,11 @@ export default function Home() {
           </StaggeredGrid>
         </section>
 
-        <section id="services" className="services container reveal">
+        {/* ── Services ── */}
+        <section id="services" className="services container reveal" aria-labelledby="services-heading">
           <div className="section-head">
             <p className="eyebrow">What I Offer</p>
-            <h2>Editing Services</h2>
+            <h2 id="services-heading">Video Editing Services</h2>
           </div>
           <div className="service-grid">
             <article className="service-card">
@@ -135,10 +145,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="results" className="results container reveal">
+        {/* ── Results ── */}
+        <section id="results" className="results container reveal" aria-labelledby="results-heading">
           <div className="section-head">
             <p className="eyebrow">Impact</p>
-            <h2>Results Snapshot</h2>
+            <h2 id="results-heading">Results Snapshot</h2>
           </div>
           <div className="result-grid">
             <article className="result-card">
@@ -165,10 +176,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="testimonials container reveal">
+        {/* ── Testimonials ── */}
+        <section className="testimonials container reveal" aria-labelledby="testimonials-heading">
           <div className="section-head">
             <p className="eyebrow">Client Feedback</p>
-            <h2>What Teams Say</h2>
+            <h2 id="testimonials-heading">What Teams Say</h2>
           </div>
           <div className="quote-grid">
             <blockquote>
@@ -182,12 +194,11 @@ export default function Home() {
           </div>
         </section>
 
-
-
-        <section id="contact" className="contact container reveal">
+        {/* ── Contact ── */}
+        <section id="contact" className="contact container reveal" aria-labelledby="contact-heading">
           <div className="contact-card">
             <p className="eyebrow">Let&apos;s Work Together</p>
-            <h2>Need ad creatives that convert?</h2>
+            <h2 id="contact-heading">Need ad creatives that convert?</h2>
             <p>
               Share your SaaS offer, target audience, and current ad style.
               I&apos;ll map out a creative approach in one call.
@@ -197,8 +208,8 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="site-footer container">
-        <p>&copy; 2026 Harish Sontakke. versatileDOTmov.</p>
+      <footer className="site-footer container" role="contentinfo">
+        <p>&copy; 2026 Harish Sontakke · versatileDOTmov · Motion Graphics &amp; Video Editor</p>
       </footer>
 
       <ClientInteractions />

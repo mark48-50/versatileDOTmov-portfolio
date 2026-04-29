@@ -22,31 +22,42 @@ export default function HeroSection() {
       variants={container}
       initial="hidden"
       animate="show"
+      aria-label="Hero — versatileDOTmov motion graphics and video editing portfolio"
     >
       <motion.p className="eyebrow" variants={item}>
         SaaS Ad Video Editor Portfolio
       </motion.p>
+
+      {/*
+        Primary H1 — contains both main keywords:
+        "versatileDOTmov" (brand) + "Motion Graphics Video Editor" (service).
+        Only one H1 exists on the entire page.
+      */}
       <motion.h1 variants={item}>
-        I turn product screens into scroll-stopping ad creatives.
+        versatileDOTmov — Motion Graphics &amp; Video Editor for SaaS Brands
       </motion.h1>
+
       <motion.p className="hero-copy" variants={item}>
         Motion graphics artist &amp; video editor crafting high-converting SaaS
         ad creatives in After Effects, Premiere Pro &amp; DaVinci Resolve. Clean
         motion, sharp hooks, and messaging that converts.
       </motion.p>
+
       <motion.div className="hero-actions" variants={item}>
-        <MagneticButton className="btn" href="#work">
+        <MagneticButton className="btn" href="#work" aria-label="View versatileDOTmov recent ad edit portfolio">
           Watch My Work
         </MagneticButton>
-        <MagneticButton className="btn btn-ghost" href="#services">
+        <MagneticButton className="btn btn-ghost" href="#services" aria-label="View video editing services offered by versatileDOTmov">
           View Services
         </MagneticButton>
       </motion.div>
-      <motion.ul className="stats" variants={item}>
+
+      <motion.ul className="stats" variants={item} aria-label="Portfolio stats">
         <li><strong>50+</strong><span>Ads Edited</span></li>
         <li><strong>38%</strong><span>Avg CTR Lift*</span></li>
         <li><strong>48 hrs</strong><span>Turnaround</span></li>
       </motion.ul>
+
       <motion.p className="note" variants={item}>
         *Based on client-reported campaign comparisons.
       </motion.p>

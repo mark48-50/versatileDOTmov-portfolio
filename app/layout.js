@@ -107,8 +107,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Preload logo as LCP resource so the browser fetches it immediately */}
+        <link rel="preload" href="/logo.png" as="image" type="image/png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
