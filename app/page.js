@@ -15,7 +15,7 @@ const videos = [
     tags: ["Hook rewrite + pacing", "Motion subtitles", "A/B cut variants"],
   },
   {
-    poster: "/thumbnail/thumbnail - 2.jpg",
+    poster: "/thumbnail/thumbnail - 2.png",
     src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/video%20-%202.mp4",
     title: "NimbusCRM: Product Launch Spot",
     desc: "30s launch edit for enterprise audience with premium motion language and CTA sequencing.",
@@ -35,14 +35,14 @@ const videos = [
 ];
 
 const popVideos = [
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-1.mp4",
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-2.mp4",
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-3.mp4",
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-4.mp4",
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-5.mp4",
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-6.mp4",
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-7.mp4",
-  "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-8.mp4",
+  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-1.mp4", poster: "/thumbnail/thumbnail-pop-1.png" },
+  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-2.mp4", poster: "/thumbnail/thumbnail-pop-2.png" },
+  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-3.mp4", poster: "/thumbnail/thumbnail-pop-3.png" },
+  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-4.mp4", poster: "/thumbnail/thumbnail-pop-4.png" },
+  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-5.mp4", poster: "/thumbnail/thumbnail-pop-5.png" },
+  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-6.mp4", poster: "/thumbnail/thumbnail-pop-6.png" },
+  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-7.mp4", poster: "/thumbnail/thumbnail-pop-7.png" },
+  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-8.mp4", poster: "/thumbnail/thumbnail-pop-8.png" },
 ];
 
 export default function Home() {
@@ -99,8 +99,8 @@ export default function Home() {
             <h2>Pop Edits</h2>
           </div>
           <StaggeredGrid className="work-grid pop-grid">
-            {popVideos.map((src, i) => (
-              <VideoCard key={i} src={src} />
+            {popVideos.map((v, i) => (
+              <VideoCard key={i} src={v.src} poster={v.poster} />
             ))}
           </StaggeredGrid>
         </section>
