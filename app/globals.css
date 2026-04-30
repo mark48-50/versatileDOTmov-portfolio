@@ -70,6 +70,9 @@
   --cursor-fill: rgba(242, 138, 75, 0.12);
   --radius: 18px;
   --container: min(1100px, 92vw);
+  /* Skeleton shimmer — dark theme */
+  --skeleton-base:  rgba(255, 255, 255, 0.06);
+  --skeleton-shine: rgba(255, 255, 255, 0.13);
 }
 
 /* Auto light: OS prefers light AND user hasn't manually chosen dark */
@@ -138,6 +141,9 @@
     --cursor-border: rgba(11, 16, 32, 0.24);
     --cursor-shadow: 0 0 18px rgba(125, 215, 255, 0.4);
     --cursor-fill: rgba(125, 215, 255, 0.18);
+    /* Skeleton shimmer — light theme */
+    --skeleton-base:  rgba(11, 16, 32, 0.07);
+    --skeleton-shine: rgba(11, 16, 32, 0.14);
   }
 }
 
@@ -206,6 +212,27 @@
   --cursor-border: rgba(11, 16, 32, 0.24);
   --cursor-shadow: 0 0 18px rgba(125, 215, 255, 0.4);
   --cursor-fill: rgba(125, 215, 255, 0.18);
+  /* Skeleton shimmer — light theme */
+  --skeleton-base:  rgba(11, 16, 32, 0.07);
+  --skeleton-shine: rgba(11, 16, 32, 0.14);
+}
+
+/* ── Skeleton shimmer utility ─────────────────────────────────────────────── */
+@keyframes skeleton-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base)  25%,
+    var(--skeleton-shine) 50%,
+    var(--skeleton-base)  75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.8s ease infinite;
+  border-radius: 6px;
 }
 
 *,

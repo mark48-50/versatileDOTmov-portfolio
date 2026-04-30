@@ -2,11 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import ClientInteractions from "./components/ClientInteractions";
 import ContactForm from "./components/ContactForm";
-import VideoCard from "./components/VideoCard";
+import VideoSection from "./components/VideoSection";
 import ThemeToggle from "./components/ThemeToggle";
 import HeroSection from "./components/HeroSection";
-import StaggeredGrid from "./components/StaggeredGrid";
 import ParallaxBackground from "./components/ParallaxBackground";
+import ParticleBackground from "./components/ParticleBackground";
 
 const videos = [
   {
@@ -50,6 +50,8 @@ const popVideos = [
 export default function Home() {
   return (
     <>
+      {/* Fixed particle network canvas — sits behind everything */}
+      <ParticleBackground />
       <ParallaxBackground />
 
       <header className="site-header" role="banner">
@@ -94,11 +96,7 @@ export default function Home() {
             <p className="eyebrow">Featured Projects</p>
             <h2 id="work-heading">Recent Ad Edits</h2>
           </div>
-          <StaggeredGrid className="work-grid">
-            {videos.map((v, i) => (
-              <VideoCard key={i} {...v} />
-            ))}
-          </StaggeredGrid>
+          <VideoSection videos={videos} gridClass="work-grid" />
         </section>
 
         {/* ── Pop Edits ── */}
@@ -107,11 +105,7 @@ export default function Home() {
             <p className="eyebrow">Pop Edits</p>
             <h2 id="pop-heading">Pop Edits</h2>
           </div>
-          <StaggeredGrid className="work-grid pop-grid">
-            {popVideos.map((v, i) => (
-              <VideoCard key={i} src={v.src} poster={v.poster} />
-            ))}
-          </StaggeredGrid>
+          <VideoSection videos={popVideos} gridClass="work-grid pop-grid" />
         </section>
 
         {/* ── Services ── */}

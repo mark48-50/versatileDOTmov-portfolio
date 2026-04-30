@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import MagneticButton from "./MagneticButton";
 
 const spring = { type: "spring", stiffness: 480, damping: 26, mass: 0.8 };
@@ -15,7 +16,64 @@ const item = {
   show: { opacity: 1, y: 0, scale: 1, transition: spring },
 };
 
-export default function HeroSection() {
+/* ── Skeleton blocks matching HeroSection's text shapes ── */
+function HeroSkeleton() {
+  return (
+    <section
+      className="hero container"
+      aria-busy="true"
+      aria-label="Loading hero content"
+    >
+      {/* eyebrow pill */}
+      <div
+        className="skeleton"
+        style={{ width: 210, height: 26, borderRadius: 999, marginBottom: "1.5rem" }}
+      />
+
+      {/* h1 — two lines matching max-width 14ch, clamp font size ~56px */}
+      <div
+        className="skeleton"
+        style={{ width: "min(520px, 82vw)", height: 58, marginBottom: "0.6rem" }}
+      />
+      <div
+        className="skeleton"
+        style={{ width: "min(380px, 65vw)", height: 58, marginBottom: "1.4rem" }}
+      />
+
+      {/* hero-copy — 3 lines */}
+      <div className="skeleton" style={{ width: "min(540px, 90vw)", height: 20, marginBottom: "0.5rem" }} />
+      <div className="skeleton" style={{ width: "min(490px, 84vw)", height: 20, marginBottom: "0.5rem" }} />
+      <div className="skeleton" style={{ width: "min(320px, 60vw)", height: 20, marginBottom: "1.9rem" }} />
+
+      {/* CTA buttons */}
+      <div style={{ display: "flex", gap: "0.8rem", marginBottom: "2.2rem" }}>
+        <div className="skeleton" style={{ width: 160, height: 48, borderRadius: 999 }} />
+        <div className="skeleton" style={{ width: 150, height: 48, borderRadius: 999 }} />
+      </div>
+
+      {/* stats grid — 3 cells */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, minmax(110px, 1fr))",
+          gap: "0.9rem",
+          maxWidth: 620,
+          marginBottom: "0.9rem",
+        }}
+      >
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="skeleton" style={{ height: 74, borderRadius: 14 }} />
+        ))}
+      </div>
+
+      {/* note line */}
+      <div className="skeleton" style={{ width: 260, height: 14, borderRadius: 999 }} />
+    </section>
+  );
+}
+
+/* ── Real HeroSection content ── */
+function HeroContent() {
   return (
     <motion.section
       className="hero container"
@@ -28,11 +86,6 @@ export default function HeroSection() {
         SaaS Ad Video Editor Portfolio
       </motion.p>
 
-      {/*
-        Primary H1 — contains both main keywords:
-        "versatileDOTmov" (brand) + "Motion Graphics Video Editor" (service).
-        Only one H1 exists on the entire page.
-      */}
       <motion.h1 variants={item}>
         versatileDOTmov — Motion Graphics &amp; Video Editor for SaaS Brands
       </motion.h1>
@@ -44,10 +97,18 @@ export default function HeroSection() {
       </motion.p>
 
       <motion.div className="hero-actions" variants={item}>
-        <MagneticButton className="btn" href="#work" aria-label="View versatileDOTmov recent ad edit portfolio">
+        <MagneticButton
+          className="btn"
+          href="#work"
+          aria-label="View versatileDOTmov recent ad edit portfolio"
+        >
           Watch My Work
         </MagneticButton>
-        <MagneticButton className="btn btn-ghost" href="#services" aria-label="View video editing services offered by versatileDOTmov">
+        <MagneticButton
+          className="btn btn-ghost"
+          href="#services"
+          aria-label="View video editing services offered by versatileDOTmov"
+        >
           View Services
         </MagneticButton>
       </motion.div>
@@ -62,5 +123,37 @@ export default function HeroSection() {
         *Based on client-reported campaign comparisons.
       </motion.p>
     </motion.section>
+  );
+}
+
+/* ── Exported component — orchestrates the skeleton → content swap ── */
+export default function HeroSection() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      {!mounted ? (
+        <motion.div
+          key="hero-skeleton"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.22, ease: "easeIn" } }}
+        >
+          <HeroSkeleton />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="hero-content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.35, ease: "easeOut" } }}
+        >
+          <HeroContent />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
