@@ -128,32 +128,30 @@ function HeroContent() {
 
 /* ── Exported component — orchestrates the skeleton → content swap ── */
 export default function HeroSection() {
-  const [mounted, setMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
+  // Plain useEffect — guaranteed to fire after hydration on every browser.
+  // No requestAnimationFrame: rAF can be throttled by mobile Safari before
+  // first paint, permanently blocking the swap.
   useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(id);
+    setIsMounted(true);
   }, []);
 
+  // Phase 1 — server render + first client paint: plain skeleton, no FM
+  if (!isMounted) {
+    return <HeroSkeleton />;
+  }
+
+  // Phase 2 — after hydration: animated content with crossfade
   return (
     <AnimatePresence mode="wait" initial={false}>
-      {!mounted ? (
-        <motion.div
-          key="hero-skeleton"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.22, ease: "easeIn" } }}
-        >
-          <HeroSkeleton />
-        </motion.div>
-      ) : (
-        <motion.div
-          key="hero-content"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { duration: 0.35, ease: "easeOut" } }}
-        >
-          <HeroContent />
-        </motion.div>
-      )}
+      <motion.div
+        key="hero-content"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { duration: 0.35, ease: "easeOut" } }}
+      >
+        <HeroContent />
+      </motion.div>
     </AnimatePresence>
   );
 }
