@@ -14,6 +14,7 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
   const playRef = useRef(null);
   const muteRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [errorText, setErrorText] = useState("");
 
   const syncButtons = () => {
     const video = videoRef.current;
@@ -25,6 +26,7 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
   };
 
   const handleVideoPlay = () => {
+    setErrorText("");
     setIsPlaying(true);
     syncButtons();
   };
@@ -45,12 +47,70 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
     syncButtons();
   };
 
+  const mediaErrorToText = (code) => {
+    switch (code) {
+      case 1:
+        return "Playback was aborted.";
+      case 2:
+        return "Network error while loading the video.";
+      case 3:
+        return "The video could not be decoded (codec/encoding issue).";
+      case 4:
+        return "Video format not supported or the file URL is invalid.";
+      default:
+        return "Video playback failed.";
+    }
+  };
+
+  const handleVideoError = () => {
+    const video = videoRef.current;
+    const err = video?.error; // MediaError — prototype getters, NOT own props
+
+    const msg = err?.code ? mediaErrorToText(err.code) : "Video failed to load.";
+    setErrorText(msg);
+
+    // MediaError's `code` and `message` are prototype getters, so spreading
+    // `err` or passing it directly to console.error always shows `{}`.
+    // Manually extract them into a plain object so they appear in the console.
+    // Also capture networkState / readyState — these pinpoint 404s vs codec
+    // failures vs autoplay policy blocks instantly.
+    const errorDetail = {
+      src,
+      // MediaError fields (must be read explicitly — not own enumerable props)
+      code: err?.code ?? null,
+      message: err?.message ?? null,
+      // MediaError code → human label mapping
+      codeLabel: err?.code ? mediaErrorToText(err.code) : "unknown",
+      // HTMLMediaElement diagnostics
+      networkState: video?.networkState ?? null, // 0=EMPTY 1=IDLE 2=LOADING 3=NO_SOURCE
+      readyState: video?.readyState ?? null,      // 0=HAVE_NOTHING … 4=HAVE_ENOUGH_DATA
+      currentSrc: video?.currentSrc || null,
+    };
+
+    // Don't fail silently in dev; this is the fastest way to discover
+    // the real cause (404/403, bad MIME type, codec, blocked by policy, etc).
+    // eslint-disable-next-line no-console
+    console.log("[VideoCard] video error", errorDetail);
+  };
+
   const handlePlay = (e) => {
     e.preventDefault();
+    setErrorText("");
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      video.play().catch(() => {});
+      const p = video.play();
+      // play() returns a Promise and will reject on autoplay-policy or unsupported sources.
+      // We surface this instead of swallowing it so the failure mode isn't "nothing happens".
+      if (p && typeof p.catch === "function") {
+        p.catch((err) => {
+          const name = err?.name || "Error";
+          const message = err?.message || "Playback failed.";
+          setErrorText(`${name}: ${message}`);
+          // eslint-disable-next-line no-console
+          console.error("[VideoCard] play() rejected", { src, err });
+        });
+      }
     } else {
       video.pause(); // triggers handleVideoPause which resets + hides overlay
     }
@@ -87,7 +147,12 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
       whileHover={glowHover}
       transition={glowTransition}
     >
-      <div className="video-thumb" style={{ position: "relative" }}>
+      <div
+        className={`video-thumb${isPlaying ? " is-playing" : ""}${
+          errorText ? " has-error" : ""
+        }`}
+        style={{ position: "relative" }}
+      >
         <video
           ref={videoRef}
           preload="metadata"
@@ -97,6 +162,7 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
           onPause={handleVideoPause}
           onVolumeChange={syncButtons}
           onEnded={handleVideoEnded}
+          onError={handleVideoError}
           style={{ display: "block", width: "100%", height: "100%" }}
         >
           <source src={src} type="video/mp4" />
@@ -105,17 +171,19 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
 
         {/* Poster overlay — shown when video is not playing */}
         {poster && !isPlaying && (
-          <div
+          <button
+            type="button"
             onClick={handlePlay}
-            role="button"
-            tabIndex={0}
             aria-label="Play video"
-            onKeyDown={(e) => e.key === "Enter" && handlePlay(e)}
             style={{
               position: "absolute",
               inset: 0,
               cursor: "pointer",
               zIndex: 2,
+              padding: 0,
+              border: "none",
+              background: "transparent",
+              display: "block",
             }}
           >
             <img
@@ -150,13 +218,33 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
                 <polygon points="24,18 46,30 24,42" fill="white" />
               </svg>
             </div>
-          </div>
+
+            {errorText && (
+              <div
+                role="status"
+                aria-live="polite"
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  right: 12,
+                  bottom: 12,
+                  padding: "0.6rem 0.75rem",
+                  borderRadius: 12,
+                  background: "rgba(0,0,0,0.65)",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  color: "white",
+                  fontSize: "0.9rem",
+                }}
+              >
+                {errorText}
+              </div>
+            )}
+          </button>
         )}
 
         <div
           className="video-controls"
           aria-label="Video controls"
-          style={{ position: "relative", zIndex: 3 }}
         >
           <button
             ref={playRef}

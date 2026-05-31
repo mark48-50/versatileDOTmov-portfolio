@@ -11,21 +11,21 @@ import ParticleBackground from "./components/ParticleBackground";
 const videos = [
   {
     poster: "/thumbnail/thumbnail - 1.jpg",
-    src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/Video%20-%201.mp4",
+    src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/Video%20-%201.mp4",
     title: 'FlowSprint: "Stop Losing Leads"',
     desc: "15s conversion ad with founder hook, UI zoom transitions, and social proof overlays.",
     tags: ["Hook rewrite + pacing", "Motion subtitles", "A/B cut variants"],
   },
   {
     poster: "/thumbnail/thumbnail - 2.png",
-    src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/video%20-%202.mp4",
+    src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/video%20-%202.mp4",
     title: "NimbusCRM: Product Launch Spot",
     desc: "30s launch edit for enterprise audience with premium motion language and CTA sequencing.",
     tags: ["Screen replacement", "Brand sound design", "Multi-format exports"],
   },
   {
     poster: "/thumbnail/thumbnail - 3.png",
-    src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/video%20-%203.mp4",
+    src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/video%20-%202.mp4",
     title: "CloudLoom: Demo-to-Ad Cutdown",
     desc: "Repurposed webinar demo into high-energy paid ad sequence with stronger narrative arc.",
     tags: [
@@ -34,17 +34,27 @@ const videos = [
       "Performance-first edits",
     ],
   },
+  {
+    poster: "/thumbnail/thumbnail - 3.png",
+    src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/video%20-%204.mp4",
+    title: "Recent Ad Edit 4",
+    desc: "High-energy paid ad sequence with a strong narrative arc.",
+    tags: [
+      "Visual rhythm mapping",
+      "Performance-first edits",
+    ],
+  },
 ];
 
 const popVideos = [
-  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-1.mp4", poster: "/thumbnail/thumbnail-pop-1.png" },
-  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-2.mp4", poster: "/thumbnail/thumbnail-pop-2.png" },
-  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-3.mp4", poster: "/thumbnail/thumbnail-pop-3.png" },
-  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-4.mp4", poster: "/thumbnail/thumbnail-pop-4.png" },
-  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-5.mp4", poster: "/thumbnail/thumbnail-pop-5.png" },
-  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-6.mp4", poster: "/thumbnail/thumbnail-pop-6.png" },
-  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-7.mp4", poster: "/thumbnail/thumbnail-pop-7.png" },
-  { src: "https://fifuxlfkmnvipwqgnlny.supabase.co/storage/v1/object/public/videos/pop-video-8.mp4", poster: "/thumbnail/thumbnail-pop-8.png" },
+  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-1.mp4", poster: "/thumbnail/thumbnail-pop-1.png" },
+  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-2.mp4", poster: "/thumbnail/thumbnail-pop-2.png" },
+  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-3.mp4", poster: "/thumbnail/thumbnail-pop-3.png" },
+  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-4.mp4", poster: "/thumbnail/thumbnail-pop-4.png" },
+  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-5.mp4", poster: "/thumbnail/thumbnail-pop-5.png" },
+  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-6.mp4", poster: "/thumbnail/thumbnail-pop-6.png" },
+  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-7.mp4", poster: "/thumbnail/thumbnail-pop-7.png" },
+  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-8.mp4", poster: "/thumbnail/thumbnail-pop-8.png" },
 ];
 
 export default function Home() {
