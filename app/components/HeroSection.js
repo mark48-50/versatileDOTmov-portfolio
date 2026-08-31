@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import MagneticButton from "./MagneticButton";
 
 const spring = { type: "spring", stiffness: 480, damping: 26, mass: 0.8 };
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.15 } },
 };
 
 const item = {
@@ -16,86 +16,103 @@ const item = {
   show: { opacity: 1, y: 0, scale: 1, transition: spring },
 };
 
-/* ── Skeleton blocks matching HeroSection's text shapes ── */
-function HeroSkeleton() {
-  return (
-    <section
-      className="hero container"
-      aria-busy="true"
-      aria-label="Loading hero content"
-    >
-      {/* eyebrow pill */}
-      <div
-        className="skeleton"
-        style={{ width: 210, height: 26, borderRadius: 999, marginBottom: "1.5rem" }}
-      />
+/* ── Letter-by-letter reveal for the headline ── */
+const HEADLINE = "versatileDOTmov";
 
-      {/* h1 — two lines matching max-width 14ch, clamp font size ~56px */}
-      <div
-        className="skeleton"
-        style={{ width: "min(520px, 82vw)", height: 58, marginBottom: "0.6rem" }}
-      />
-      <div
-        className="skeleton"
-        style={{ width: "min(380px, 65vw)", height: 58, marginBottom: "1.4rem" }}
-      />
+const letterContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.04, delayChildren: 0.3 } },
+};
 
-      {/* hero-copy — 3 lines */}
-      <div className="skeleton" style={{ width: "min(540px, 90vw)", height: 20, marginBottom: "0.5rem" }} />
-      <div className="skeleton" style={{ width: "min(490px, 84vw)", height: 20, marginBottom: "0.5rem" }} />
-      <div className="skeleton" style={{ width: "min(320px, 60vw)", height: 20, marginBottom: "1.9rem" }} />
+const letterVariant = {
+  hidden: { opacity: 0, y: 60, rotateX: -90 },
+  show: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
-      {/* CTA buttons */}
-      <div style={{ display: "flex", gap: "0.8rem", marginBottom: "2.2rem" }}>
-        <div className="skeleton" style={{ width: 160, height: 48, borderRadius: 999 }} />
-        <div className="skeleton" style={{ width: 150, height: 48, borderRadius: 999 }} />
-      </div>
+/* ── Tool badges ── */
+const TOOLS = [
+  "After Effects",
+  "Premiere Pro",
+  "DaVinci Resolve",
+];
 
-      {/* stats grid — 3 cells */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, minmax(110px, 1fr))",
-          gap: "0.9rem",
-          maxWidth: 620,
-          marginBottom: "0.9rem",
-        }}
-      >
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="skeleton" style={{ height: 74, borderRadius: 14 }} />
-        ))}
-      </div>
+const badgeContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.8 } },
+};
 
-      {/* note line */}
-      <div className="skeleton" style={{ width: 260, height: 14, borderRadius: 999 }} />
-    </section>
-  );
-}
+const badgeVariant = {
+  hidden: { opacity: 0, x: -20 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
 
-/* ── Real HeroSection content ── */
-function HeroContent() {
+export default function HeroSection() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+
   return (
     <motion.section
+      ref={ref}
       className="hero container"
       variants={container}
       initial="hidden"
-      animate="show"
+      animate={inView ? "show" : "hidden"}
       aria-label="Hero — versatileDOTmov motion graphics and video editing portfolio"
     >
+      {/* ── Marquee background ── */}
+      <div className="hero-marquee" aria-hidden="true">
+        <div className="hero-marquee__track">
+          {/* Duplicate text for seamless loop */}
+          <span>versatileDOTmov&nbsp;·&nbsp;</span>
+          <span>versatileDOTmov&nbsp;·&nbsp;</span>
+          <span>versatileDOTmov&nbsp;·&nbsp;</span>
+          <span>versatileDOTmov&nbsp;·&nbsp;</span>
+          <span>versatileDOTmov&nbsp;·&nbsp;</span>
+          <span>versatileDOTmov&nbsp;·&nbsp;</span>
+          <span>versatileDOTmov&nbsp;·&nbsp;</span>
+          <span>versatileDOTmov&nbsp;·&nbsp;</span>
+        </div>
+      </div>
+
+      {/* ── Eyebrow ── */}
       <motion.p className="eyebrow" variants={item}>
         SaaS Ad Video Editor Portfolio
       </motion.p>
 
-      <motion.h1 variants={item}>
-        versatileDOTmov — Motion Graphics &amp; Video Editor for SaaS Brands
+      {/* ── Letter-by-letter headline ── */}
+      <motion.h1
+        variants={letterContainer}
+        initial="hidden"
+        animate={inView ? "show" : "hidden"}
+        style={{ display: "flex", flexWrap: "wrap", perspective: "600px" }}
+      >
+        {HEADLINE.split("").map((char, i) => (
+          <motion.span
+            key={i}
+            variants={letterVariant}
+            style={{
+              display: "inline-block",
+              transformOrigin: "bottom center",
+            }}
+          >
+            {char}
+          </motion.span>
+        ))}
       </motion.h1>
 
+      {/* ── Subtitle ── */}
       <motion.p className="hero-copy" variants={item}>
         Motion graphics artist &amp; video editor crafting high-converting SaaS
         ad creatives in After Effects, Premiere Pro &amp; DaVinci Resolve. Clean
         motion, sharp hooks, and messaging that converts.
       </motion.p>
 
+      {/* ── CTAs ── */}
       <motion.div className="hero-actions" variants={item}>
         <MagneticButton
           className="btn"
@@ -113,6 +130,7 @@ function HeroContent() {
         </MagneticButton>
       </motion.div>
 
+      {/* ── Stats ── */}
       <motion.ul className="stats" variants={item} aria-label="Portfolio stats">
         <li><strong>50+</strong><span>Ads Edited</span></li>
         <li><strong>38%</strong><span>Avg CTR Lift*</span></li>
@@ -122,36 +140,21 @@ function HeroContent() {
       <motion.p className="note" variants={item}>
         *Based on client-reported campaign comparisons.
       </motion.p>
-    </motion.section>
-  );
-}
 
-/* ── Exported component — orchestrates the skeleton → content swap ── */
-export default function HeroSection() {
-  const [isMounted, setIsMounted] = useState(false);
-
-  // Plain useEffect — guaranteed to fire after hydration on every browser.
-  // No requestAnimationFrame: rAF can be throttled by mobile Safari before
-  // first paint, permanently blocking the swap.
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Phase 1 — server render + first client paint: plain skeleton, no FM
-  if (!isMounted) {
-    return <HeroSkeleton />;
-  }
-
-  // Phase 2 — after hydration: animated content with crossfade
-  return (
-    <AnimatePresence mode="wait" initial={false}>
+      {/* ── Tool Badges ── */}
       <motion.div
-        key="hero-content"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { duration: 0.35, ease: "easeOut" } }}
+        className="tool-badges"
+        variants={badgeContainer}
+        initial="hidden"
+        animate={inView ? "show" : "hidden"}
       >
-        <HeroContent />
+        {TOOLS.map((tool) => (
+          <motion.span key={tool} className="tool-badge" variants={badgeVariant}>
+            <span className="tool-badge__dot" aria-hidden="true" />
+            {tool}
+          </motion.span>
+        ))}
       </motion.div>
-    </AnimatePresence>
+    </motion.section>
   );
 }

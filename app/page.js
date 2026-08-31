@@ -3,10 +3,14 @@ import Image from "next/image";
 import ClientInteractions from "./components/ClientInteractions";
 import ContactForm from "./components/ContactForm";
 import VideoSection from "./components/VideoSection";
-import ThemeToggle from "./components/ThemeToggle";
 import HeroSection from "./components/HeroSection";
 import ParallaxBackground from "./components/ParallaxBackground";
-import ParticleBackground from "./components/ParticleBackground";
+import ScrollProgressBar from "./components/ScrollProgressBar";
+import ServicesSection from "./components/ServicesSection";
+import ProcessSection from "./components/ProcessSection";
+import ResultsSection from "./components/ResultsSection";
+import TestimonialsSection from "./components/TestimonialsSection";
+import HorizontalScrollStrip from "./components/HorizontalScrollStrip";
 
 const videos = [
   {
@@ -60,10 +64,13 @@ const popVideos = [
 export default function Home() {
   return (
     <>
-      {/* Fixed particle network canvas — sits behind everything */}
-      <ParticleBackground />
+      {/* Fixed parallax background blobs */}
       <ParallaxBackground />
 
+      {/* Scroll progress bar */}
+      <ScrollProgressBar />
+
+      {/* ── Navigation ── */}
       <header className="site-header" role="banner">
         <nav className="nav container" aria-label="Main site navigation">
           <Link className="logo" href="#home" aria-label="versatileDOTmov — go to homepage">
@@ -93,117 +100,62 @@ export default function Home() {
           <Link className="btn btn-small" href="#contact" aria-label="Book a discovery call with versatileDOTmov">
             Book a Call
           </Link>
-          <ThemeToggle />
         </nav>
       </header>
 
       <main id="home">
+        {/* ── 1. Hero (with About/tool badges integrated) ── */}
         <HeroSection />
 
-        {/* ── Recent Ad Edits ── */}
-        <section id="work" className="work container reveal" aria-labelledby="work-heading">
+        {/* ── 2. Featured Projects — Recent Ad Edits (horizontal scroll) ── */}
+        <section id="work" className="hscroll-section container" aria-labelledby="work-heading">
           <div className="section-head">
+            <p className="section-number">02</p>
             <p className="eyebrow">Featured Projects</p>
             <h2 id="work-heading">Recent Ad Edits</h2>
           </div>
-          <VideoSection videos={videos} gridClass="work-grid" />
+          <HorizontalScrollStrip cardCount={videos.length}>
+            {videos.map((v, i) => (
+              <div key={i} className="hscroll-card">
+                <VideoSection videos={[v]} gridClass="work-grid" />
+              </div>
+            ))}
+          </HorizontalScrollStrip>
         </section>
 
-        {/* ── Pop Edits ── */}
-        <section id="pop-edits" className="work container reveal" aria-labelledby="pop-heading">
+        {/* ── 3. Pop Edits (horizontal scroll) ── */}
+        <section id="pop-edits" className="hscroll-section container" aria-labelledby="pop-heading">
           <div className="section-head">
             <p className="eyebrow">Pop Edits</p>
             <h2 id="pop-heading">Pop Edits</h2>
           </div>
-          <VideoSection videos={popVideos} gridClass="work-grid pop-grid" />
+          <HorizontalScrollStrip cardCount={popVideos.length}>
+            {popVideos.map((v, i) => (
+              <div key={i} className="hscroll-card">
+                <VideoSection videos={[v]} gridClass="work-grid pop-grid" />
+              </div>
+            ))}
+          </HorizontalScrollStrip>
         </section>
 
-        {/* ── Services ── */}
-        <section id="services" className="services container reveal" aria-labelledby="services-heading">
-          <div className="section-head">
-            <p className="eyebrow">What I Offer</p>
-            <h2 id="services-heading">Video Editing Services</h2>
-          </div>
-          <div className="service-grid">
-            <article className="service-card">
-              <h3>Ad Creative Editing</h3>
-              <p>
-                Short-form ad edits built for Meta, YouTube, TikTok, and
-                LinkedIn performance campaigns.
-              </p>
-            </article>
-            <article className="service-card">
-              <h3>Product Demo Cutdowns</h3>
-              <p>
-                Transform long demos and webinars into concise conversion-focused
-                video ads.
-              </p>
-            </article>
-            <article className="service-card">
-              <h3>Retention + Hooks</h3>
-              <p>
-                Hook testing, subtitle dynamics, and scene pacing to improve
-                watch time and click-through.
-              </p>
-            </article>
-          </div>
-        </section>
+        {/* ── 4. Services ── */}
+        <ServicesSection />
 
-        {/* ── Results ── */}
-        <section id="results" className="results container reveal" aria-labelledby="results-heading">
-          <div className="section-head">
-            <p className="eyebrow">Impact</p>
-            <h2 id="results-heading">Results Snapshot</h2>
-          </div>
-          <div className="result-grid">
-            <article className="result-card">
-              <h3>+42%</h3>
-              <p>
-                Click-through increase after ad creative refresh for a B2B SaaS
-                onboarding campaign.
-              </p>
-            </article>
-            <article className="result-card">
-              <h3>-27%</h3>
-              <p>
-                Cost per lead reduction across 6 ad variants in a 4-week
-                iteration cycle.
-              </p>
-            </article>
-            <article className="result-card">
-              <h3>3.1x</h3>
-              <p>
-                Higher average watch duration using stronger first 3-second hook
-                formats.
-              </p>
-            </article>
-          </div>
-        </section>
+        {/* ── 5. Process ── */}
+        <ProcessSection />
 
-        {/* ── Testimonials ── */}
-        <section className="testimonials container reveal" aria-labelledby="testimonials-heading">
-          <div className="section-head">
-            <p className="eyebrow">Client Feedback</p>
-            <h2 id="testimonials-heading">What Teams Say</h2>
-          </div>
-          <div className="quote-grid">
-            <blockquote>
-              &ldquo;Our paid team finally had creative that matched our product
-              quality. Performance lifted in week one.&rdquo;
-            </blockquote>
-            <blockquote>
-              &ldquo;Fast turnaround, clear creative logic, and edits that
-              actually improve CAC. Exactly what we needed.&rdquo;
-            </blockquote>
-          </div>
-        </section>
+        {/* ── 6. Results Snapshot ── */}
+        <ResultsSection />
 
-        {/* ── Contact ── */}
-        <section id="contact" className="contact container reveal" aria-labelledby="contact-heading">
+        {/* ── 7. Client Feedback ── */}
+        <TestimonialsSection />
+
+        {/* ── 8. Contact ── */}
+        <section id="contact" className="container" aria-labelledby="contact-heading">
           <div className="contact-card">
             <p className="eyebrow">Let&apos;s Work Together</p>
             <h2 id="contact-heading">Need ad creatives that convert?</h2>
-            <p>
+            <p style={{ color: "var(--muted)" }}>
               Share your SaaS offer, target audience, and current ad style.
               I&apos;ll map out a creative approach in one call.
             </p>
@@ -212,8 +164,9 @@ export default function Home() {
         </section>
       </main>
 
+      {/* ── Footer ── */}
       <footer className="site-footer container" role="contentinfo">
-        <p>&copy; 2026 Harish Sontakke · versatileDOTmov · Motion Graphics &amp; Video Editor</p>
+        <p>&copy; 2026 Harish Sontakke · versatileDOTmov</p>
       </footer>
 
       <ClientInteractions />

@@ -2,9 +2,8 @@ import "./globals.css";
 import JsonLd from "./components/JsonLd";
 import { Analytics } from "@vercel/analytics/next";
 
-/* ── 1. Full Next.js Metadata Object ── */
+/* ── Full Next.js Metadata Object ── */
 export const metadata = {
-  // IMPORTANT: Pointing to your live Vercel URL so Google indexes the right site!
   metadataBase: new URL("https://versatiledotmovportfolio.vercel.app"),
 
   title: {
@@ -94,22 +93,19 @@ export const metadata = {
     apple: "/logo.png",
   },
 
-  /* ── Verification (add IDs once you register) ── */
+  /* ── Verification ── */
   verification: {
-    // When Google Search Console gives you an HTML Tag to verify ownership, 
-    // grab the string of random letters/numbers and paste it right here:
     // google: "your-google-verification-code",
   },
 
-  /* ── Other ── */
   category: "portfolio",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
-        {/* Preload logo as LCP resource so the browser fetches it immediately */}
+        {/* Preload logo as LCP resource */}
         <link rel="preload" href="/logo.png" as="image" type="image/png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
