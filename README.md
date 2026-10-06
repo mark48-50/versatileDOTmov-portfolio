@@ -6,11 +6,11 @@ Portfolio for Harish Sontakke, a video editor and motion graphics artist. Built 
 
 - Responsive cinematic portfolio layout
 - Local project videos served from `public/videos`
-- Poster-first video cards with play, mute, and full-size controls
+- Poster-first video cards without visible titles or descriptions
 - Responsive vertical project grids
 - Reduced-motion support
-- Validated inquiry form backed by Supabase/Lovable Cloud
-- Optional inquiry email notifications through Resend
+- Validated inquiry form that sends SMTP email to both portfolio inboxes
+- Optional inquiry copy in Supabase/Lovable Cloud
 
 ## Run locally
 
@@ -27,16 +27,18 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Copy `.env.example` to `.env.local` and add your private values. Never commit `.env.local`.
 
-The contact form requires:
+The contact form requires `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, and `SMTP_PASS`. For Gmail, use `smtp.gmail.com` on port `465` and a [Google App Password](https://support.google.com/mail/answer/185833), not the account's regular password. App Passwords require 2-Step Verification on the sending account. The server sends each inquiry to both `harishsontakke1606@gmail.com` and `versatiledotmov@gmail.com`, with the visitor's email as Reply-To. The message includes every form field.
+
+The send is awaited before the form shows success. SMTP acceptance normally takes seconds, though final inbox delivery time is controlled by the mail providers and cannot be guaranteed within five minutes.
+
+Set these optional variables to also store a copy in the database:
 
 - `LOVABLE_SUPABASE_URL`
 - `LOVABLE_SUPABASE_SERVICE_ROLE_KEY`
 
-Resend variables are optional. Without them, inquiries are still saved to the database.
-
 ## Database
 
-Run the SQL migration in `supabase/migrations/20260831190000_create_inquiries.sql` against the connected Supabase/Lovable Cloud project. It creates the `inquiries` table used by the contact form.
+If using the database copy, run `supabase/migrations/20260907000000_create_inquiries.sql` against the connected Supabase/Lovable Cloud project. It creates the `inquiries` table.
 
 ## Videos
 
@@ -53,6 +55,6 @@ npm run start
 
 ## Deploy
 
-Push the repository to GitHub, import it into Vercel, and configure the same environment variables in the Vercel project settings. The app uses the standard Next.js build command.
+Push the repository to GitHub, import it into Vercel, and configure the SMTP variables in the Vercel project settings. Add the optional database variables there if needed. Redeploy after changing environment variables. The app uses the standard Next.js build command.
 
 © 2026 Harish Sontakke. All rights reserved.

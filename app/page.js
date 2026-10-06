@@ -16,41 +16,18 @@ const videos = [
   {
     poster: "/thumbnail/thumbnail - 1.jpg",
     src: "/videos/video-2.mp4",
-    title: 'FlowSprint: "Stop Losing Leads"',
-    category: "Ad Creative",
-    desc: "15s conversion ad with founder hook, UI zoom transitions, and social proof overlays.",
-    tags: ["Hook rewrite + pacing", "Motion subtitles", "A/B cut variants"],
   },
   {
     poster: "/thumbnail/thumbnail - 2.png",
     src: "/videos/video-3.mp4",
-    title: "NimbusCRM: Product Launch Spot",
-    category: "Product Launch",
-    desc: "30s launch edit for enterprise audience with premium motion language and CTA sequencing.",
-    tags: ["Screen replacement", "Brand sound design", "Multi-format exports"],
   },
   {
     poster: "/thumbnail/thumbnail - 3.png",
     src: "/videos/video-2.mp4",
-    title: "CloudLoom: Demo-to-Ad Cutdown",
-    category: "Demo Cutdown",
-    desc: "Repurposed webinar demo into high-energy paid ad sequence with stronger narrative arc.",
-    tags: [
-      "Story restructure",
-      "Visual rhythm mapping",
-      "Performance-first edits",
-    ],
   },
   {
     poster: "/thumbnail/thumbnail - 3.png",
     src: "/videos/video-3.mp4",
-    title: "Recent Ad Edit 4",
-    category: "Paid Social",
-    desc: "High-energy paid ad sequence with a strong narrative arc.",
-    tags: [
-      "Visual rhythm mapping",
-      "Performance-first edits",
-    ],
   },
 ];
 
@@ -60,8 +37,6 @@ const popVideos = Array.from({ length: 8 }, (_, index) => {
   return {
     src: `/videos/pop-video-${number}.mp4`,
     poster: `/thumbnail/thumbnail-pop-${number}.png`,
-    title: `Pop Edit ${String(number).padStart(2, "0")}`,
-    category: "Short-form Edit",
   };
 });
 
@@ -120,7 +95,7 @@ export default function Home() {
             <p className="eyebrow">Featured Projects</p>
             <h2 id="work-heading">Recent Ad Edits</h2>
           </div>
-          <VideoSection videos={videos} gridClass="work-grid ad-grid" />
+          <VideoSection videos={videos} gridClass="work-grid ad-grid" sectionLabel="Recent Ad Edit" />
         </section>
 
         {/* ── 3. Pop Edits grid ── */}
@@ -129,7 +104,7 @@ export default function Home() {
             <p className="eyebrow">Pop Edits</p>
             <h2 id="pop-heading">Pop Edits</h2>
           </div>
-          <VideoSection videos={popVideos} gridClass="work-grid pop-grid" />
+          <VideoSection videos={popVideos} gridClass="work-grid pop-grid" sectionLabel="Pop Edit" />
         </section>
 
         {/* ── 4. Services ── */}

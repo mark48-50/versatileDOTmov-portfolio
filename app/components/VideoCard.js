@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 const glowHover = {
@@ -12,40 +12,32 @@ const glowTransition = { duration: 0.35, ease: "linear" };
 export default function VideoCard({
   poster,
   src,
-  title,
-  category,
-  desc,
-  tags = [],
-  number,
-  autoPlay = false,
+  label,
 }) {
   const videoRef = useRef(null);
-  const playRef = useRef(null);
-  const muteRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [errorText, setErrorText] = useState("");
 
-  const syncButtons = () => {
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    if (playRef.current)
-      playRef.current.textContent = video.paused ? "Play" : "Pause";
-    if (muteRef.current)
-      muteRef.current.textContent = video.muted ? "Unmute" : "Mute";
-  };
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) video.pause();
+    }, { threshold: 0.1 });
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
 
   const handleVideoPlay = () => {
     setErrorText("");
     setIsPlaying(true);
-    syncButtons();
   };
 
   const handleVideoPause = () => {
     const video = videoRef.current;
     if (!video) return;
-    video.currentTime = 0;
     setIsPlaying(false);
-    syncButtons();
   };
 
   const handleVideoEnded = () => {
@@ -53,7 +45,6 @@ export default function VideoCard({
     if (!video) return;
     video.currentTime = 0;
     setIsPlaying(false);
-    syncButtons();
   };
 
   const mediaErrorToText = (code) => {
@@ -78,28 +69,8 @@ export default function VideoCard({
     const msg = err?.code ? mediaErrorToText(err.code) : "Video failed to load.";
     setErrorText(msg);
 
-    // MediaError's `code` and `message` are prototype getters, so spreading
-    // `err` or passing it directly to console.error always shows `{}`.
-    // Manually extract them into a plain object so they appear in the console.
-    // Also capture networkState / readyState — these pinpoint 404s vs codec
-    // failures vs autoplay policy blocks instantly.
-    const errorDetail = {
-      src,
-      // MediaError fields (must be read explicitly — not own enumerable props)
-      code: err?.code ?? null,
-      message: err?.message ?? null,
-      // MediaError code → human label mapping
-      codeLabel: err?.code ? mediaErrorToText(err.code) : "unknown",
-      // HTMLMediaElement diagnostics
-      networkState: video?.networkState ?? null, // 0=EMPTY 1=IDLE 2=LOADING 3=NO_SOURCE
-      readyState: video?.readyState ?? null,      // 0=HAVE_NOTHING … 4=HAVE_ENOUGH_DATA
-      currentSrc: video?.currentSrc || null,
-    };
-
-    // Don't fail silently in dev; this is the fastest way to discover
-    // the real cause (404/403, bad MIME type, codec, blocked by policy, etc).
-    // eslint-disable-next-line no-console
-    console.log("[VideoCard] video error", errorDetail);
+    setIsPlaying(false);
+    console.error("[VideoCard] video error", { src, code: err?.code, message: err?.message });
   };
 
   const handlePlay = (e) => {
@@ -109,10 +80,9 @@ export default function VideoCard({
     if (!video) return;
     if (video.paused) {
       const p = video.play();
-      // play() returns a Promise and will reject on autoplay-policy or unsupported sources.
-      // We surface this instead of swallowing it so the failure mode isn't "nothing happens".
       if (p && typeof p.catch === "function") {
         p.catch((err) => {
+          if (err?.name === "AbortError") return;
           const name = err?.name || "Error";
           const message = err?.message || "Playback failed.";
           setErrorText(`${name}: ${message}`);
@@ -121,7 +91,7 @@ export default function VideoCard({
         });
       }
     } else {
-      video.pause(); // triggers handleVideoPause which resets + hides overlay
+      video.pause();
     }
   };
 
@@ -130,25 +100,8 @@ export default function VideoCard({
     const video = videoRef.current;
     if (!video) return;
     video.muted = !video.muted;
-    syncButtons();
+    setIsMuted(video.muted);
   };
-
-  if (autoPlay) {
-    return (
-      <motion.article
-        className="card"
-        whileHover={glowHover}
-        transition={glowTransition}
-      >
-        <div className="video-thumb">
-          <video autoPlay loop muted playsInline preload="metadata">
-            <source src={src} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      </motion.article>
-    );
-  }
 
   return (
     <motion.article
@@ -165,12 +118,12 @@ export default function VideoCard({
         <video
           ref={videoRef}
           muted
-          preload="metadata"
+          preload="none"
           playsInline
           poster={poster}
           onPlay={handleVideoPlay}
           onPause={handleVideoPause}
-          onVolumeChange={syncButtons}
+          onVolumeChange={(event) => setIsMuted(event.currentTarget.muted)}
           onEnded={handleVideoEnded}
           onError={handleVideoError}
           style={{ display: "block", width: "100%", height: "100%" }}
@@ -179,12 +132,12 @@ export default function VideoCard({
           Your browser does not support the video tag.
         </video>
 
-        {/* Poster overlay — shown when video is not playing */}
+        {/* Poster stays visible until the visitor starts this video. */}
         {poster && !isPlaying && (
           <button
             type="button"
             onClick={handlePlay}
-            aria-label="Play video"
+            aria-label={`Play ${label}`}
             style={{
               position: "absolute",
               inset: 0,
@@ -198,7 +151,7 @@ export default function VideoCard({
           >
             <img
               src={poster}
-              alt={`${title || "Project"} video thumbnail`}
+              alt={`${label} thumbnail`}
               style={{
                 width: "100%",
                 height: "100%",
@@ -229,50 +182,30 @@ export default function VideoCard({
               </svg>
             </div>
 
-            {errorText && (
-              <div
-                role="status"
-                aria-live="polite"
-                style={{
-                  position: "absolute",
-                  left: 12,
-                  right: 12,
-                  bottom: 12,
-                  padding: "0.6rem 0.75rem",
-                  borderRadius: 12,
-                  background: "rgba(0,0,0,0.65)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  color: "white",
-                  fontSize: "0.9rem",
-                }}
-              >
-                {errorText}
-              </div>
-            )}
           </button>
         )}
+
+        {errorText && <p className="video-error" role="status">{errorText}</p>}
 
         <div
           className="video-controls"
           aria-label="Video controls"
         >
           <button
-            ref={playRef}
             className="video-btn"
             type="button"
             onClick={handlePlay}
-            aria-label="Play or pause"
+            aria-label={isPlaying ? `Pause ${label}` : `Play ${label}`}
           >
-            Play
+            {isPlaying ? "Pause" : "Play"}
           </button>
           <button
-            ref={muteRef}
             className="video-btn"
             type="button"
             onClick={handleMute}
-            aria-label="Mute or unmute"
+            aria-label={isMuted ? `Unmute ${label}` : `Mute ${label}`}
           >
-            Unmute
+            {isMuted ? "Unmute" : "Mute"}
           </button>
           <a
             href={src}
@@ -285,8 +218,8 @@ export default function VideoCard({
               justifyContent: "center",
               padding: "0.5rem",
             }}
-            aria-label="View full size"
-            title="View full size"
+            aria-label={`View ${label} full size`}
+            title={`View ${label} full size`}
           >
             <svg
               width="15"
@@ -302,19 +235,6 @@ export default function VideoCard({
             </svg>
           </a>
         </div>
-      </div>
-      <div className="project-card-copy">
-        <div className="project-card-meta">
-          <span className="project-number">{number}</span>
-          <span>{category || "Video Edit"}</span>
-        </div>
-        {title && <h3>{title}</h3>}
-        {desc && <p>{desc}</p>}
-        {tags.length > 0 && (
-          <ul className="project-tags" aria-label={`${title} project details`}>
-            {tags.map((tag) => <li key={tag}>{tag}</li>)}
-          </ul>
-        )}
       </div>
     </motion.article>
   );

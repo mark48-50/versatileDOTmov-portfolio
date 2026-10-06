@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import MagneticButton from "./MagneticButton";
 
 const spring = { type: "spring", stiffness: 480, damping: 26, mass: 0.8 };
@@ -16,21 +16,19 @@ const item = {
   show: { opacity: 1, y: 0, scale: 1, transition: spring },
 };
 
-/* ── Letter-by-letter reveal for the headline ── */
 const HEADLINE = "Professional video editing + motion design that makes content perform.";
 
 const letterContainer = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.04, delayChildren: 0.3 } },
+  show: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
 };
 
 const letterVariant = {
-  hidden: { opacity: 0, y: 60, rotateX: -90 },
+  hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
-    rotateX: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -54,6 +52,7 @@ const badgeVariant = {
 export default function HeroSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
+  const reduceMotion = useReducedMotion();
 
   return (
     <motion.section
@@ -84,24 +83,22 @@ export default function HeroSection() {
         Harish Sontakke · Video Editor · Motion Graphics Artist
       </motion.p>
 
-      {/* ── Letter-by-letter headline ── */}
+      {/* Whole words wrap together at every viewport width. */}
       <motion.h1
         variants={letterContainer}
-        initial="hidden"
+        initial={reduceMotion ? false : "hidden"}
         animate={inView ? "show" : "hidden"}
         className="hero-title"
-        style={{ display: "flex", flexWrap: "wrap", perspective: "600px" }}
+        aria-label={HEADLINE}
       >
-        {HEADLINE.split("").map((char, i) => (
+        {HEADLINE.split(" ").map((word, i) => (
           <motion.span
             key={i}
             variants={letterVariant}
-            style={{
-              display: "inline-block",
-              transformOrigin: "bottom center",
-            }}
+            className="hero-word"
+            aria-hidden="true"
           >
-            {char === " " ? "\u00a0" : char}
+            {word}
           </motion.span>
         ))}
       </motion.h1>

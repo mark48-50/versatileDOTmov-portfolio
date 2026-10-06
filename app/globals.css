@@ -511,9 +511,6 @@ section {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HORIZONTAL SCROLL STRIP (Featured Projects)
-   ══════════════════════════════════════════════════════════════════════════ */
-/* ══════════════════════════════════════════════════════════════════════════
    VIDEO / PROJECT CARDS
    ══════════════════════════════════════════════════════════════════════════ */
 .card {
@@ -567,6 +564,7 @@ section {
 .video-thumb {
   position: relative;
   overflow: hidden;
+  aspect-ratio: 16 / 9;
   border: 1px solid var(--line);
   border-radius: 12px;
   margin-bottom: 1rem;
@@ -578,7 +576,7 @@ section {
 .video-thumb video {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   object-fit: cover;
   pointer-events: none;
 }
@@ -619,13 +617,24 @@ section {
   pointer-events: none;
 }
 
-.video-thumb:hover .video-controls,
-.video-thumb:focus-within .video-controls,
-.video-thumb.is-playing .video-controls,
-.video-thumb.has-error .video-controls {
+.video-thumb.is-playing .video-controls {
+  display: flex;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+.video-error {
+  position: absolute;
+  inset-inline: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 4;
+  margin: 0;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg-deep);
+  border: 1px solid var(--line-hover);
+  color: var(--text);
+  font-size: 0.85rem;
 }
 
 .video-btn {
@@ -674,53 +683,6 @@ section {
 .work-grid .card {
   min-width: 0;
   height: 100%;
-}
-
-.project-card-copy {
-  display: grid;
-  gap: 0.65rem;
-}
-
-.project-card-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.project-number {
-  color: var(--accent);
-}
-
-.project-card-copy h3 {
-  margin: 0;
-  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
-  line-height: 1.25;
-}
-
-.project-card-copy p {
-  margin: 0;
-  font-size: 0.95rem;
-}
-
-.project-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  padding: 0 !important;
-  list-style: none;
-}
-
-.project-tags li {
-  border: 1px solid var(--line);
-  padding: 0.35rem 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -1176,10 +1138,17 @@ html { scroll-padding-top: calc(var(--nav-height) + 1.5rem); }
 }
 
 .hero-title {
-  max-width: 15ch;
-  font-size: clamp(3rem, 7.2vw, 7rem);
-  line-height: 0.98;
-  letter-spacing: -0.055em;
+  max-width: 22ch;
+  font-size: clamp(2.8rem, 5.4vw, 5.7rem);
+  line-height: 1.07;
+  letter-spacing: 0;
+  overflow-wrap: normal;
+}
+
+.hero-word {
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 0.23em;
 }
 
 .about-strip {
@@ -1208,7 +1177,7 @@ html { scroll-padding-top: calc(var(--nav-height) + 1.5rem); }
 
 @media (max-width: 480px) {
   :root { --container: calc(100vw - 28px); }
-  .hero-title { font-size: clamp(2.7rem, 13vw, 4rem); }
+  .hero-title { font-size: clamp(2.2rem, 9.5vw, 3.25rem); }
   .contact-card { padding: 1.25rem; }
 }
 
