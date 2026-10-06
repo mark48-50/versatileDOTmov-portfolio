@@ -35,13 +35,14 @@ export default function ContactForm() {
   const statusClass = `form-status${status.type ? ` ${status.type}` : ""}`;
 
   return (
-    <form className="contact-form" onSubmit={handleSubmit}>
+    <form className="contact-form" onSubmit={handleSubmit} noValidate>
       <label>
         <span>Name *</span>
         <input
           type="text"
           name="name"
           required
+          autoComplete="name"
           placeholder="Harish Sontakke"
           disabled={loading}
         />
@@ -52,18 +53,20 @@ export default function ContactForm() {
           type="email"
           name="email"
           required
+          autoComplete="email"
           placeholder="versatileDOTmov@gmail.com"
           disabled={loading}
         />
       </label>
       <label>
         <span>Number</span>
-        <input type="tel" name="number" placeholder="+91 0000-0000-00" disabled={loading} />
+        <input type="tel" name="number" pattern="[+0-9 ()\\-.]{7,20}" autoComplete="tel" placeholder="+91 0000-0000-00" disabled={loading} />
       </label>
       <label>
         <span>What services do you want from us?</span>
         <textarea
           name="services"
+          required
           rows={4}
           placeholder="Tell me what kind of video editing help you need..."
           disabled={loading}
@@ -81,6 +84,7 @@ export default function ContactForm() {
       <p className={statusClass} role="status" aria-live="polite">
         {status.text}
       </p>
+      {status.type && <div className={`form-toast ${status.type}`} role="status" aria-live="polite">{status.text}</div>}
     </form>
   );
 }

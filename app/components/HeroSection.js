@@ -17,7 +17,7 @@ const item = {
 };
 
 /* ── Letter-by-letter reveal for the headline ── */
-const HEADLINE = "versatileDOTmov";
+const HEADLINE = "Professional video editing + motion design that makes content perform.";
 
 const letterContainer = {
   hidden: {},
@@ -81,7 +81,7 @@ export default function HeroSection() {
 
       {/* ── Eyebrow ── */}
       <motion.p className="eyebrow" variants={item}>
-        SaaS Ad Video Editor Portfolio
+        Harish Sontakke · Video Editor · Motion Graphics Artist
       </motion.p>
 
       {/* ── Letter-by-letter headline ── */}
@@ -89,6 +89,7 @@ export default function HeroSection() {
         variants={letterContainer}
         initial="hidden"
         animate={inView ? "show" : "hidden"}
+        className="hero-title"
         style={{ display: "flex", flexWrap: "wrap", perspective: "600px" }}
       >
         {HEADLINE.split("").map((char, i) => (
@@ -100,7 +101,7 @@ export default function HeroSection() {
               transformOrigin: "bottom center",
             }}
           >
-            {char}
+            {char === " " ? "\u00a0" : char}
           </motion.span>
         ))}
       </motion.h1>
@@ -116,10 +117,10 @@ export default function HeroSection() {
       <motion.div className="hero-actions" variants={item}>
         <MagneticButton
           className="btn"
-          href="#work"
+          href="#contact"
           aria-label="View versatileDOTmov recent ad edit portfolio"
         >
-          Watch My Work
+          Send Inquiry
         </MagneticButton>
         <MagneticButton
           className="btn btn-ghost"

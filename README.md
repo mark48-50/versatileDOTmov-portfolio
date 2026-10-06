@@ -1,73 +1,58 @@
-# versatileDOTmov — SaaS Ad Video Editor Portfolio
+# versatileDOTmov Portfolio
 
-A modern portfolio site for **versatileDOTmov**, a SaaS ad video editor specializing in scroll-stopping ad creatives. Built with **Next.js 16** (App Router).
+Portfolio for Harish Sontakke, a video editor and motion graphics artist. Built with Next.js 16, React 19, Motion for React, and vanilla CSS.
 
-## Tech Stack
+## Highlights
 
-- **Framework:** Next.js 16 (App Router)
-- **Styling:** Vanilla CSS with CSS custom properties
-- **Fonts:** Sora, IBM Plex Mono (Google Fonts)
-- **Email:** Nodemailer (contact form API route)
+- Responsive cinematic portfolio layout
+- Local project videos served from `public/videos`
+- Poster-first video cards with play, mute, and full-size controls
+- Responsive vertical project grids
+- Reduced-motion support
+- Validated inquiry form backed by Supabase/Lovable Cloud
+- Optional inquiry email notifications through Resend
 
-## Features
+## Run locally
 
-- **Dark / Light Theme** — Manual toggle with circle-wipe transition animation (View Transitions API)
-- **3D Tilt Cards** — Interactive hover effects on cards with glow follow
-- **Scroll Reveal** — Sections animate in on scroll via IntersectionObserver
-- **Custom Cursor** — Accent-colored cursor effect on desktop
-- **Video Showcase** — Play/mute controls on portfolio video cards
-- **Contact Form** — Server-side email via Next.js Route Handler + Nodemailer
-- **Responsive** — Fully responsive with mobile menu
-
-## Project Structure
-
-```
-├── app/
-│   ├── api/contact/route.js   # POST handler for contact form
-│   ├── components/
-│   │   ├── ClientInteractions.js  # Cursor, scroll reveal, tilt, mobile menu
-│   │   ├── ContactForm.js         # Contact form with validation
-│   │   ├── ThemeToggle.js         # Dark/light toggle with circle-wipe
-│   │   └── VideoCard.js           # Video player card
-│   ├── globals.css             # All styles + theme variables
-│   ├── layout.js               # Root layout with fonts & metadata
-│   └── page.js                 # Main page (Server Component)
-├── public/
-│   ├── logo.png
-│   ├── thumbnail/              # Video poster images
-│   └── videos/                 # Portfolio video files
-├── next.config.mjs
-└── package.json
-```
-
-## Getting Started
+Requirements: Node.js 20.9 or newer and npm.
 
 ```bash
-# Install dependencies
-npm install
-
-# Start dev server
+npm ci
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Environment Variables
+## Environment variables
 
-Create a `.env.local` file for the contact form email functionality:
+Copy `.env.example` to `.env.local` and add your private values. Never commit `.env.local`.
 
-```env
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USER=you@example.com
-SMTP_PASS=your-app-password
-CONTACT_TO=recipient@example.com
+The contact form requires:
+
+- `LOVABLE_SUPABASE_URL`
+- `LOVABLE_SUPABASE_SERVICE_ROLE_KEY`
+
+Resend variables are optional. Without them, inquiries are still saved to the database.
+
+## Database
+
+Run the SQL migration in `supabase/migrations/20260831190000_create_inquiries.sql` against the connected Supabase/Lovable Cloud project. It creates the `inquiries` table used by the contact form.
+
+## Videos
+
+Deployable videos live in `public/videos` and are referenced as `/videos/<filename>.mp4`. The local `videos form drive` source folder is ignored so the repository does not contain duplicate copies.
+
+The current video assets total about 280 MB. Each file is below GitHub's 100 MB per-file limit, but Git LFS or external media hosting may be preferable later if the library grows substantially.
+
+## Production checks
+
+```bash
+npm run build
+npm run start
 ```
 
-## Deployment
+## Deploy
 
-Deploy on [Vercel](https://vercel.com) — push to GitHub and import the repo. Set environment variables in the Vercel dashboard.
-
-## License
+Push the repository to GitHub, import it into Vercel, and configure the same environment variables in the Vercel project settings. The app uses the standard Next.js build command.
 
 © 2026 Harish Sontakke. All rights reserved.

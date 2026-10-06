@@ -33,8 +33,8 @@ export default function VideoSection({ videos, gridClass }) {
       animate={inView ? "show" : "hidden"}
     >
       {videos.map((v, i) => (
-        <motion.div key={i} variants={cardVariant}>
-          <VideoCard {...v} />
+        <motion.div key={`${v.src}-${i}`} variants={cardVariant}>
+          <VideoCard {...v} number={String(i + 1).padStart(2, "0")} />
         </motion.div>
       ))}
     </motion.div>

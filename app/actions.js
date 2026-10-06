@@ -2,56 +2,53 @@
 
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phonePattern = /^[+]?\d[\d\s().-]{6,19}$/;
+const clean = (value) => String(value ?? "").replace(/[<>]/g, "").trim();
+
+async function saveInquiry(inquiry) {
+  const baseUrl = process.env.LOVABLE_SUPABASE_URL || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.LOVABLE_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!baseUrl || !serviceKey) throw new Error("Contact database is not configured.");
+
+  const response = await fetch(`${baseUrl.replace(/\/$/, "")}/rest/v1/inquiries`, {
+    method: "POST",
+    headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, "Content-Type": "application/json", Prefer: "return=minimal" },
+    body: JSON.stringify(inquiry),
+    cache: "no-store",
+  });
+  if (!response.ok) throw new Error("Could not save the inquiry.");
+}
 
 export async function sendEmail(formData) {
-  const name     = formData.get("name");
-  const email    = formData.get("email");
-  const number   = formData.get("number") || "Not provided";
-  const services = formData.get("services") || "Not provided";
+  const inquiry = {
+    name: clean(formData.get("name")),
+    email: clean(formData.get("email")).toLowerCase(),
+    phone: clean(formData.get("number")),
+    services: clean(formData.get("services")),
+  };
+
+  if (!inquiry.name) return { ok: false, error: "Name is required." };
+  if (!emailPattern.test(inquiry.email)) return { ok: false, error: "Enter a valid email address." };
+  if (inquiry.phone && !phonePattern.test(inquiry.phone)) return { ok: false, error: "Enter a valid phone number." };
+  if (!inquiry.services) return { ok: false, error: "Tell me what services you want." };
 
   try {
-    const { error } = await resend.emails.send({
-      from:     "versatileDOTmov <onboarding@resend.dev>",
-      to:       ["versatiledotmov@gmail.com"],
-      reply_to: email,
-      subject:  `New inquiry from ${name}`,
-      html: `
-        <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#0b1020;">
-          <h2 style="margin-top:0;font-size:1.4rem;">New inquiry — versatileDOTmov</h2>
-          <table style="width:100%;border-collapse:collapse;">
-            <tr>
-              <td style="padding:10px 0;border-bottom:1px solid #e4e4e7;font-weight:600;width:120px;">Name</td>
-              <td style="padding:10px 0;border-bottom:1px solid #e4e4e7;">${name}</td>
-            </tr>
-            <tr>
-              <td style="padding:10px 0;border-bottom:1px solid #e4e4e7;font-weight:600;">Email</td>
-              <td style="padding:10px 0;border-bottom:1px solid #e4e4e7;">
-                <a href="mailto:${email}" style="color:#f28a4b;">${email}</a>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:10px 0;border-bottom:1px solid #e4e4e7;font-weight:600;">Phone</td>
-              <td style="padding:10px 0;border-bottom:1px solid #e4e4e7;">${number}</td>
-            </tr>
-            <tr>
-              <td style="padding:10px 0;font-weight:600;vertical-align:top;">Services</td>
-              <td style="padding:10px 0;white-space:pre-wrap;">${services}</td>
-            </tr>
-          </table>
-          <p style="margin-top:24px;font-size:0.85rem;color:#6b7280;">
-            Reply to this email to respond directly to ${name}.
-          </p>
-        </div>
-      `,
-    });
-
-    if (error) {
-      return { ok: false, error: error.message };
+    await saveInquiry(inquiry);
+    if (process.env.RESEND_API_KEY) {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      const { error } = await resend.emails.send({
+        from: process.env.CONTACT_FROM || "versatileDOTmov <onboarding@resend.dev>",
+        to: [process.env.CONTACT_TO || "versatiledotmov@gmail.com"],
+        reply_to: inquiry.email,
+        subject: `New inquiry from ${inquiry.name}`,
+        text: `Name: ${inquiry.name}\nEmail: ${inquiry.email}\nPhone: ${inquiry.phone || "Not provided"}\nServices: ${inquiry.services}`,
+      });
+      if (error) console.error("[contact] notification failed", error.message);
     }
-
     return { ok: true };
-  } catch (err) {
-    return { ok: false, error: "Failed to send email. Please try again." };
+  } catch (error) {
+    console.error("[contact] submission failed", error);
+    return { ok: false, error: "Failed to send inquiry. Please try again." };
   }
 }

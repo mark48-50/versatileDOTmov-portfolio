@@ -513,27 +513,6 @@ section {
 /* ══════════════════════════════════════════════════════════════════════════
    HORIZONTAL SCROLL STRIP (Featured Projects)
    ══════════════════════════════════════════════════════════════════════════ */
-.hscroll-section {
-  padding: var(--section-gap) 0;
-}
-
-.hscroll-pin {
-  position: relative;
-  overflow: hidden;
-}
-
-.hscroll-track {
-  display: flex;
-  gap: 1.5rem;
-  padding: 0 4vw;
-  will-change: transform;
-}
-
-.hscroll-card {
-  flex-shrink: 0;
-  width: clamp(280px, 38vw, 420px);
-}
-
 /* ══════════════════════════════════════════════════════════════════════════
    VIDEO / PROJECT CARDS
    ══════════════════════════════════════════════════════════════════════════ */
@@ -674,16 +653,74 @@ section {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   WORK GRID (fallback for non-horizontal layout)
+   VERTICAL PROJECT GRIDS
    ══════════════════════════════════════════════════════════════════════════ */
+.project-section {
+  width: 100%;
+  padding-block: var(--section-gap);
+}
+
 .work-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
 }
 
 .pop-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.work-grid > div,
+.work-grid .card {
+  min-width: 0;
+  height: 100%;
+}
+
+.project-card-copy {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.project-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-number {
+  color: var(--accent);
+}
+
+.project-card-copy h3 {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  line-height: 1.25;
+}
+
+.project-card-copy p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0 !important;
+  list-style: none;
+}
+
+.project-tags li {
+  border: 1px solid var(--line);
+  padding: 0.35rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -1110,11 +1147,71 @@ section {
 
   .process-step::after { display: none; }
 
-  .hscroll-card {
-    width: clamp(260px, 80vw, 360px);
-  }
-
   .tool-badges {
     justify-content: center;
   }
+}
+
+@media (min-width: 1200px) {
+  .pop-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Structural gallery fix and editorial refinements */
+:root {
+  --nav-height: 74px;
+  --radius: 8px;
+  --section-gap: clamp(4rem, 8vw, 7rem);
+}
+
+html { scroll-padding-top: calc(var(--nav-height) + 1.5rem); }
+
+.hero {
+  min-height: calc(100svh - var(--nav-height));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(4rem, 9vw, 7rem);
+}
+
+.hero-title {
+  max-width: 15ch;
+  font-size: clamp(3rem, 7.2vw, 7rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.about-strip {
+  border-block: 1px solid var(--line);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+  background: oklch(0.1 0.02 270 / 0.72);
+}
+
+.about-layout { display: grid; grid-template-columns: 0.8fr 1fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+.about-layout h2 { margin: 0; font-size: clamp(1.8rem, 3.4vw, 3.4rem); }
+.about-copy p { color: var(--muted); }
+.about-tools { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.about-tools span { border: 1px solid var(--line); padding: 0.45rem 0.65rem; font: 0.75rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; }
+
+.contact-card { border-radius: var(--radius); text-align: left; display: grid; grid-template-columns: minmax(0, .8fr) minmax(320px, 1fr); column-gap: clamp(2rem, 7vw, 6rem); }
+.contact-card .eyebrow, .contact-card h2, .contact-card > p { grid-column: 1; }
+.contact-card .contact-form { grid-column: 2; grid-row: 1 / span 4; width: 100%; margin-top: 0; }
+.form-toast { position: fixed; right: max(1rem, calc((100vw - 1100px) / 2)); bottom: 1rem; z-index: 100; max-width: min(360px, calc(100vw - 2rem)); border: 1px solid var(--line-hover); border-radius: var(--radius); padding: 0.8rem 1rem; background: oklch(0.08 0.02 270 / 0.96); box-shadow: 0 18px 48px oklch(0 0 0 / 0.45); font: 0.82rem var(--font-mono); }
+.form-toast.ok { border-color: var(--cyan); }
+.form-toast.err { border-color: var(--accent); }
+
+@media (max-width: 819px) {
+  .about-layout, .contact-card { grid-template-columns: 1fr; }
+  .contact-card .contact-form { grid-column: 1; grid-row: auto; }
+}
+
+@media (max-width: 480px) {
+  :root { --container: calc(100vw - 28px); }
+  .hero-title { font-size: clamp(2.7rem, 13vw, 4rem); }
+  .contact-card { padding: 1.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }

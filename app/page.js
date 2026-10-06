@@ -10,27 +10,30 @@ import ServicesSection from "./components/ServicesSection";
 import ProcessSection from "./components/ProcessSection";
 import ResultsSection from "./components/ResultsSection";
 import TestimonialsSection from "./components/TestimonialsSection";
-import HorizontalScrollStrip from "./components/HorizontalScrollStrip";
+import AboutSection from "./components/AboutSection";
 
 const videos = [
   {
     poster: "/thumbnail/thumbnail - 1.jpg",
-    src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/Video%20-%201.mp4",
+    src: "/videos/video-2.mp4",
     title: 'FlowSprint: "Stop Losing Leads"',
+    category: "Ad Creative",
     desc: "15s conversion ad with founder hook, UI zoom transitions, and social proof overlays.",
     tags: ["Hook rewrite + pacing", "Motion subtitles", "A/B cut variants"],
   },
   {
     poster: "/thumbnail/thumbnail - 2.png",
-    src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/video%20-%202.mp4",
+    src: "/videos/video-3.mp4",
     title: "NimbusCRM: Product Launch Spot",
+    category: "Product Launch",
     desc: "30s launch edit for enterprise audience with premium motion language and CTA sequencing.",
     tags: ["Screen replacement", "Brand sound design", "Multi-format exports"],
   },
   {
     poster: "/thumbnail/thumbnail - 3.png",
-    src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/video%20-%202.mp4",
+    src: "/videos/video-2.mp4",
     title: "CloudLoom: Demo-to-Ad Cutdown",
+    category: "Demo Cutdown",
     desc: "Repurposed webinar demo into high-energy paid ad sequence with stronger narrative arc.",
     tags: [
       "Story restructure",
@@ -40,8 +43,9 @@ const videos = [
   },
   {
     poster: "/thumbnail/thumbnail - 3.png",
-    src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/video%20-%204.mp4",
+    src: "/videos/video-3.mp4",
     title: "Recent Ad Edit 4",
+    category: "Paid Social",
     desc: "High-energy paid ad sequence with a strong narrative arc.",
     tags: [
       "Visual rhythm mapping",
@@ -50,16 +54,16 @@ const videos = [
   },
 ];
 
-const popVideos = [
-  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-1.mp4", poster: "/thumbnail/thumbnail-pop-1.png" },
-  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-2.mp4", poster: "/thumbnail/thumbnail-pop-2.png" },
-  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-3.mp4", poster: "/thumbnail/thumbnail-pop-3.png" },
-  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-4.mp4", poster: "/thumbnail/thumbnail-pop-4.png" },
-  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-5.mp4", poster: "/thumbnail/thumbnail-pop-5.png" },
-  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-6.mp4", poster: "/thumbnail/thumbnail-pop-6.png" },
-  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-7.mp4", poster: "/thumbnail/thumbnail-pop-7.png" },
-  { src: "https://yjogzkigbzwjewkddzoy.supabase.co/storage/v1/object/public/video/pop-video-8.mp4", poster: "/thumbnail/thumbnail-pop-8.png" },
-];
+const popVideos = Array.from({ length: 8 }, (_, index) => {
+  const number = index + 1;
+
+  return {
+    src: `/videos/pop-video-${number}.mp4`,
+    poster: `/thumbnail/thumbnail-pop-${number}.png`,
+    title: `Pop Edit ${String(number).padStart(2, "0")}`,
+    category: "Short-form Edit",
+  };
+});
 
 export default function Home() {
   return (
@@ -107,35 +111,25 @@ export default function Home() {
         {/* ── 1. Hero (with About/tool badges integrated) ── */}
         <HeroSection />
 
-        {/* ── 2. Featured Projects — Recent Ad Edits (horizontal scroll) ── */}
-        <section id="work" className="hscroll-section container" aria-labelledby="work-heading">
+        <AboutSection />
+
+        {/* ── 2. Featured Projects — Recent Ad Edits grid ── */}
+        <section id="work" className="project-section container" aria-labelledby="work-heading">
           <div className="section-head">
             <p className="section-number">02</p>
             <p className="eyebrow">Featured Projects</p>
             <h2 id="work-heading">Recent Ad Edits</h2>
           </div>
-          <HorizontalScrollStrip cardCount={videos.length}>
-            {videos.map((v, i) => (
-              <div key={i} className="hscroll-card">
-                <VideoSection videos={[v]} gridClass="work-grid" />
-              </div>
-            ))}
-          </HorizontalScrollStrip>
+          <VideoSection videos={videos} gridClass="work-grid ad-grid" />
         </section>
 
-        {/* ── 3. Pop Edits (horizontal scroll) ── */}
-        <section id="pop-edits" className="hscroll-section container" aria-labelledby="pop-heading">
+        {/* ── 3. Pop Edits grid ── */}
+        <section id="pop-edits" className="project-section container" aria-labelledby="pop-heading">
           <div className="section-head">
             <p className="eyebrow">Pop Edits</p>
             <h2 id="pop-heading">Pop Edits</h2>
           </div>
-          <HorizontalScrollStrip cardCount={popVideos.length}>
-            {popVideos.map((v, i) => (
-              <div key={i} className="hscroll-card">
-                <VideoSection videos={[v]} gridClass="work-grid pop-grid" />
-              </div>
-            ))}
-          </HorizontalScrollStrip>
+          <VideoSection videos={popVideos} gridClass="work-grid pop-grid" />
         </section>
 
         {/* ── 4. Services ── */}
@@ -154,7 +148,7 @@ export default function Home() {
         <section id="contact" className="container" aria-labelledby="contact-heading">
           <div className="contact-card">
             <p className="eyebrow">Let&apos;s Work Together</p>
-            <h2 id="contact-heading">Need ad creatives that convert?</h2>
+            <h2 id="contact-heading">Need creatives that convert?</h2>
             <p style={{ color: "var(--muted)" }}>
               Share your SaaS offer, target audience, and current ad style.
               I&apos;ll map out a creative approach in one call.

@@ -9,7 +9,16 @@ const glowHover = {
 };
 const glowTransition = { duration: 0.35, ease: "linear" };
 
-export default function VideoCard({ poster, src, title, desc, autoPlay = false }) {
+export default function VideoCard({
+  poster,
+  src,
+  title,
+  category,
+  desc,
+  tags = [],
+  number,
+  autoPlay = false,
+}) {
   const videoRef = useRef(null);
   const playRef = useRef(null);
   const muteRef = useRef(null);
@@ -155,6 +164,7 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
       >
         <video
           ref={videoRef}
+          muted
           preload="metadata"
           playsInline
           poster={poster}
@@ -188,7 +198,7 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
           >
             <img
               src={poster}
-              alt="Video thumbnail"
+              alt={`${title || "Project"} video thumbnail`}
               style={{
                 width: "100%",
                 height: "100%",
@@ -262,7 +272,7 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
             onClick={handleMute}
             aria-label="Mute or unmute"
           >
-            Mute
+            Unmute
           </button>
           <a
             href={src}
@@ -292,6 +302,19 @@ export default function VideoCard({ poster, src, title, desc, autoPlay = false }
             </svg>
           </a>
         </div>
+      </div>
+      <div className="project-card-copy">
+        <div className="project-card-meta">
+          <span className="project-number">{number}</span>
+          <span>{category || "Video Edit"}</span>
+        </div>
+        {title && <h3>{title}</h3>}
+        {desc && <p>{desc}</p>}
+        {tags.length > 0 && (
+          <ul className="project-tags" aria-label={`${title} project details`}>
+            {tags.map((tag) => <li key={tag}>{tag}</li>)}
+          </ul>
+        )}
       </div>
     </motion.article>
   );

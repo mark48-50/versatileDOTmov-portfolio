@@ -50,9 +50,9 @@ export const metadata = {
       "Freelance motion graphics artist & video editor crafting high-converting SaaS ad creatives, product demos, and paid social campaigns.",
     images: [
       {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
+        url: "/logo.png",
+        width: 512,
+        height: 512,
         alt: "versatileDOTmov — Motion Graphics & Video Editing Portfolio",
         type: "image/png",
       },
@@ -65,7 +65,7 @@ export const metadata = {
     title: "Harish Sontakke — Motion Graphics & Video Editor",
     description:
       "Scroll-stopping SaaS ad creatives, product demos & paid social videos. After Effects · Premiere Pro · DaVinci Resolve.",
-    images: ["/og-image.png"],
+    images: ["/logo.png"],
     creator: "@versatiledotmov",
   },
 
