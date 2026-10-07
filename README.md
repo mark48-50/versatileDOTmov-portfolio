@@ -44,7 +44,8 @@ If using the database copy, run `supabase/migrations/20260907000000_create_inqui
 
 Deployable videos live in `public/videos` and are referenced as `/videos/<filename>.mp4`. The local `videos form drive` source folder is ignored so the repository does not contain duplicate copies.
 
-The current video assets total about 280 MB. Each file is below GitHub's 100 MB per-file limit, but Git LFS or external media hosting may be preferable later if the library grows substantially.
+The deployable videos total about 66 MiB. The Pop Edits are web-friendly H.264/AAC encodes with fast-start metadata. If the library grows substantially, use a media host or a deployment pipeline that materializes Git LFS files.
+These deployable MP4 files are committed as ordinary Git files, not Git LFS pointers. Vercel otherwise serves the pointer text instead of playable video. The prebuild check rejects pointer files before deployment.
 
 ## Production checks
 
