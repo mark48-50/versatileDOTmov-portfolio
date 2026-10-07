@@ -2,6 +2,27 @@ import assert from "node:assert/strict";
 import { createServer } from "node:net";
 import { test } from "node:test";
 import { sendEmail } from "../app/actions.js";
+import { buildInquiryEmail } from "../app/lib/inquiry-email.js";
+
+test("inquiry email has branded HTML, a text fallback, and escaped form content", () => {
+  const message = buildInquiryEmail({
+    name: 'Jane & Co <script>"',
+    email: "jane@example.com",
+    phone: "",
+    services: "Ad editing & motion\n<script>alert('x')</script>",
+  });
+
+  assert.equal(message.subject, 'New project inquiry from Jane & Co <script>" | versatileDOTmov');
+  assert.match(message.html, /New project inquiry/);
+  assert.match(message.html, /<img src="https:\/\/versatiledotmovportfolio\.vercel\.app\/logo\.png" alt="versatileDOTmov logo" width="76" height="76"/);
+  assert.match(message.html, /VIDEO EDITING &amp; MOTION DESIGN/);
+  assert.match(message.html, /Jane &amp; Co &lt;script&gt;&quot;/);
+  assert.match(message.html, /Ad editing &amp; motion<br>&lt;script&gt;alert\(&#39;x&#39;\)&lt;\/script&gt;/);
+  assert.doesNotMatch(message.html, /<script>/);
+  assert.doesNotMatch(message.html, /Not provided/);
+  assert.match(message.html, /mailto:jane%40example\.com/);
+  assert.match(message.text, /Ad editing & motion\n<script>alert\('x'\)<\/script>/);
+});
 
 test("contact form emails both inboxes with every submitted field", async () => {
   const recipients = [];
@@ -70,10 +91,12 @@ test("contact form emails both inboxes with every submitted field", async () => 
     assert.ok(recipients.some((line) => line.includes("versatiledotmov@gmail.com")));
 
     const message = messageLines.join("\n");
+    assert.match(message, /Content-Type: multipart\/alternative/i);
+    assert.match(message, /From: versatileDOTmov <sender@example\.com>/i);
     assert.match(message, /Name: Test Client/);
     assert.match(message, /Email: client@example.com/);
-    assert.match(message, /Number: \+91 1234567890/);
-    assert.match(message, /What services do you want from us\?: Ad creative editing/);
+    assert.match(message, /Phone: \+91 1234567890/);
+    assert.match(message, /SERVICES REQUESTED\nAd creative editing/);
     assert.match(message, /Reply-To: client@example.com/i);
   } finally {
     for (const name of envNames) {

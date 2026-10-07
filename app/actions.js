@@ -1,6 +1,7 @@
 "use server";
 
 import nodemailer from "nodemailer";
+import { buildInquiryEmail } from "./lib/inquiry-email.js";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phonePattern = /^[+]?\d[\d\s().-]{6,19}$/;
@@ -27,17 +28,12 @@ async function notifyInquiry(inquiry) {
     socketTimeout: 20000,
   });
 
+  const message = buildInquiryEmail(inquiry);
   const result = await transporter.sendMail({
-    from: process.env.SMTP_FROM || user,
+    from: process.env.SMTP_FROM || { name: "versatileDOTmov", address: user },
     to: recipients,
     replyTo: inquiry.email,
-    subject: "New versatileDOTmov inquiry",
-    text: [
-      `Name: ${inquiry.name}`,
-      `Email: ${inquiry.email}`,
-      `Number: ${inquiry.phone || "Not provided"}`,
-      `What services do you want from us?: ${inquiry.services}`,
-    ].join("\n"),
+    ...message,
   });
 
   const accepted = new Set((result.accepted || []).map((address) => address.toLowerCase()));
